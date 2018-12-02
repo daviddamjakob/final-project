@@ -1,51 +1,54 @@
-<div class="row">
-  <div class="col-md-12">
-    
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    <a href="/articles/new" class="btn btn-primary btn-block">
-      <i class="fa fa-fw fa-plus"></i>
-      Share an article
-    </a>
-    <hr>
-  </div> <!-- col -->
-</div> <!-- row -->    
-
-<!-- looping through each article -->
-<% @articles.reverse_each do |article| %>
   
-  <!-- get Twitter card information -->
-  <% image = Bateman::TwitterCard.new(article.link).image %>
-  <% card = Bateman::TwitterCard.new(article.link).card %>
-  <!-- there are four different card options: summary, summary_large_image, player and app -->
-  <!-- summary has no image, player is a video link, app links an app (not essential here) -->
-  <!-- Youtube videos work with iFrame, other videos with <video> tag -->
-  <% title = Bateman::TwitterCard.new(article.link).title %>
-  <% creator = Bateman::TwitterCard.new(article.link).creator %>
-  <!-- either @source, author name or empty -->
-  <% description = Bateman::TwitterCard.new(article.link).description %>
-  <% site = Bateman::TwitterCard.new(article.link).site %>
-  <% url = Bateman::TwitterCard.new(article.link).url %>
-  
-  <div class="row-mb-5">
+  <div class="row">
     <div class="col-md-8 offset-md-2">
-      <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">
-                <%= title%>
-            </h4>
+      <a href="/articles/new" class="btn btn-primary btn-block">
+        <i class="fa fa-fw fa-plus"></i>
+        Share an article
+      </a>
+      <hr>
+    </div> <!-- col -->
+  </div> <!-- row -->    
+  
+  <!-- looping through each article -->
+  <% @articles.reverse_each do |article| %>
+  
+    <!-- get Twitter card information -->
+    <% image = Bateman::TwitterCard.new(article.link).image %>
+    <% card = Bateman::TwitterCard.new(article.link).card %>
+    <!-- there are four different card options: summary, summary_large_image, player and app -->
+    <!-- summary has no image, player is a video link, app links an app (not essential here) -->
+    <!-- Youtube videos work with iFrame, other videos with <video> tag -->
+    <% title = Bateman::TwitterCard.new(article.link).title %>
+    <% creator = Bateman::TwitterCard.new(article.link).creator %>
+    <!-- either @source, author name or empty -->
+    <% description = Bateman::TwitterCard.new(article.link).description %>
+    <% site = Bateman::TwitterCard.new(article.link).site %>
+    <% url = Bateman::TwitterCard.new(article.link).url %>
+
+    
+    <div class="row mb-5">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header">
+              <h4 class="card-title">
+                  <%= title%>
+              </h4>
           </div> <!-- card header -->
           <div class="card-body">
             <!-- snippet of article + desciption with link to website -->
             <!-- still need to look into video compatibility -->
             <% if card == "summary_large_image"%>
               <a href="<%=article.link%>">
-                <img src="<%=image%>" class="img-fluid">
+                <img src="<%=image%>" class="img-fluid pl-4 pr-4">
                 <% if description.blank? == false %>
-                  <span class="d-none d-lg-block">
+                  <span class="d-none d-lg-block pl-4 pr-4 pt-1">
                     <small style="color:grey"><%=description%></small>
                   </span>
                 <% end %>
@@ -59,12 +62,79 @@
                 <span><small style="color:grey">find the article here</small></span>
               </a>
             <% end %>
-            
-            shared by <a href="/users/<%=article.user.id%>"><%=article.user.username%>
-            </a> (<%= time_ago_in_words(article.created_at) %><%=%> ago)
-            
-          </div> <!-- card body -->
-      </div> <!-- card -->
-    </div> <!-- col -->
-</div> <!-- row -->
-<% end %>
+
+              <ul class="list-unstyled pl-4 pr-4 pt-2">
+                <li class="media mb-2">
+                  <div class="media-body">
+                  <p><em>
+                      <small>shared by</small>
+                      <a href="/users/<%=article.user.id%>"><%=article.user.username%></a>
+                      <small> (<%= time_ago_in_words(article.created_at) %><%=%> ago)</small>
+                    </em><br/>
+                    <%=article.caption%>
+                  </p>
+                  </div>
+                </li>
+                <hr>
+                
+                
+                <!-- comments-->
+                <% article.comments.each do |comment|%>
+                  <li class="media" style="line-height:85%">
+                    <div class="media-body">
+                      <p><em>
+                          <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
+                        </em>
+                        <small> >> <%=comment.body%></small>
+                      </p>
+                    </div>
+                  </li>
+                <% end%>
+              
+                <!-- adding a comment-->
+                <li class="media">
+                  <div class="media-body">
+                    <form action="/create_comment" method="post" class="pt-4">
+                      <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                      <input type="hidden" name="article_id" value="<%=article.id%>">
+                      
+                      <div class="form-group">
+                        <label for="body" class="sr-only">
+                          Body
+                        </label>
+                        <div class="input-group">
+                          <input type="text" id="body" name="body" class="form-control" placeholder="Add a comment..." required>
+                          <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <i class="far fa-comment"></i>
+                              Add Comment
+                            </button>
+                          </span>
+                        </div> <!-- input-group -->
+                      </div> <!-- form-group -->
+                    </form>
+                  </div> <!-- media-body -->
+                </li>
+                
+                 <!-- delete and edit options-->
+                <% if article.user_id == current_user.id%>
+                
+                  <div class="btn-group d-flex" role="group">
+                    <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100">
+                      <i class="fas fa-edit"></i>
+                      Edit
+                    </a>
+                    <a href="/delete_article/<%=article.id%>" class="btn btn-danger w-100" rel="nofollow">
+                      <i class="fas fa-trash"></i>
+                      Delete
+                    </a>
+                  </div>
+                <% end%>
+                
+              </ul>
+            </div> <!-- card body -->
+        </div> <!-- card -->
+      </div> <!-- col -->
+  </div> <!-- row -->
+  <% end %>
+</div>
