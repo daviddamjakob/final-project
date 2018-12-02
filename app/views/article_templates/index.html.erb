@@ -1,106 +1,70 @@
-<div class="row mb-3">
+<div class="row">
   <div class="col-md-12">
-    <h1>
-      All articles
-    </h1>
+    
+  </div>
+</div>
 
-    <a href="/articles/new" class="btn btn-block btn-outline-secondary">
-      Add a new article
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <a href="/articles/new" class="btn btn-primary btn-block">
+      <i class="fa fa-fw fa-plus"></i>
+      Share an article
     </a>
-  </div>
-</div>
+    <hr>
+  </div> <!-- col -->
+</div> <!-- row -->    
 
-
-<hr>
-
-<div class="row mb-3">
-  <div class="col-md-12">
-    <table class="table">
-      <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          Link
-        </th>
-
-        <th>
-          Caption
-        </th>
-
-        <th>
-          Reading time
-        </th>
-
-        <th>
-          User
-        </th>
-
-        <th>
-          Author
-        </th>
-
-        <th>
-          Publisher
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
-      </tr>
-
-      <% @articles.each do |article| %>
-      <tr>
-        <td>
-          <%= article.id %>
-        </td>
-
-        <td>
-          <%= article.link %>
-        </td>
-
-        <td>
-          <%= article.caption %>
-        </td>
-
-        <td>
-          <%= article.reading_time %>
-        </td>
-
-        <td>
-          <%= article.user_id %>
-        </td>
-
-        <td>
-          <%= article.author_id %>
-        </td>
-
-        <td>
-          <%= article.publisher_id %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(article.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(article.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/articles/<%= article.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
-      <% end %>
-    </table>
-  </div>
-</div>
+<!-- looping through each article -->
+<% @articles.reverse_each do |article| %>
+  
+  <!-- get Twitter card information -->
+  <% image = Bateman::TwitterCard.new(article.link).image %>
+  <% card = Bateman::TwitterCard.new(article.link).card %>
+  <!-- there are four different card options: summary, summary_large_image, player and app -->
+  <!-- summary has no image, player is a video link, app links an app (not essential here) -->
+  <!-- Youtube videos work with iFrame, other videos with <video> tag -->
+  <% title = Bateman::TwitterCard.new(article.link).title %>
+  <% creator = Bateman::TwitterCard.new(article.link).creator %>
+  <!-- either @source, author name or empty -->
+  <% description = Bateman::TwitterCard.new(article.link).description %>
+  <% site = Bateman::TwitterCard.new(article.link).site %>
+  <% url = Bateman::TwitterCard.new(article.link).url %>
+  
+  <div class="row-mb-5">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">
+                <%= title%>
+            </h4>
+          </div> <!-- card header -->
+          <div class="card-body">
+            <!-- snippet of article + desciption with link to website -->
+            <!-- still need to look into video compatibility -->
+            <% if card == "summary_large_image"%>
+              <a href="<%=article.link%>">
+                <img src="<%=image%>" class="img-fluid">
+                <% if description.blank? == false %>
+                  <span class="d-none d-lg-block">
+                    <small style="color:grey"><%=description%></small>
+                  </span>
+                <% end %>
+              </a>
+            <% elsif description.blank? == false %>
+              <a href="<%=article.link%>">
+                <small style="color:grey"><%=description%></small>
+              </a>
+            <% else %>
+              <a href="<%=article.link%>">
+                <span><small style="color:grey">find the article here</small></span>
+              </a>
+            <% end %>
+            
+            shared by <a href="/users/<%=article.user.id%>"><%=article.user.username%>
+            </a> (<%= time_ago_in_words(article.created_at) %><%=%> ago)
+            
+          </div> <!-- card body -->
+      </div> <!-- card -->
+    </div> <!-- col -->
+</div> <!-- row -->
+<% end %>
