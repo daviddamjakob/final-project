@@ -1,0 +1,66 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <h1>
+      All publishers
+    </h1>
+
+    <a href="/publishers/new" class="btn btn-block btn-outline-secondary">
+      Add a new publisher
+    </a>
+  </div>
+</div>
+
+
+<hr>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Name
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @publishers.each do |publisher| %>
+      <tr>
+        <td>
+          <%= publisher.id %>
+        </td>
+
+        <td>
+          <%= publisher.name %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(publisher.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(publisher.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/publishers/<%= publisher.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

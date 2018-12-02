@@ -1,0 +1,86 @@
+<div class="row mb-3">
+  <div class="col-md-8 offset-md-2">
+    <h1>
+      Article #<%= @article.id %> details
+    </h1>
+
+    <div class="row mb-3">
+      <div class="col">
+        <a href="/articles" class="btn btn-block btn-outline-secondary">
+          Go back
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="/articles/<%= @article.id %>/edit" class="btn btn-block btn-outline-secondary">
+          Edit article
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="/delete_article/<%= @article.id %>" class="btn btn-block btn-outline-secondary">
+          Delete article
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Link
+      </dt>
+      <dd>
+        <%= @article.link %>
+      </dd>
+
+      <dt>
+        Caption
+      </dt>
+      <dd>
+        <%= @article.caption %>
+      </dd>
+
+      <dt>
+        Reading time
+      </dt>
+      <dd>
+        <%= @article.reading_time %>
+      </dd>
+
+      <dt>
+        User
+      </dt>
+      <dd>
+        <%= @article.user_id %>
+      </dd>
+
+      <dt>
+        Author
+      </dt>
+      <dd>
+        <%= @article.author_id %>
+      </dd>
+
+      <dt>
+        Publisher
+      </dt>
+      <dd>
+        <%= @article.publisher_id %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@article.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@article.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+

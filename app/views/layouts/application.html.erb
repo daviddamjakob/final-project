@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>FinalProject</title>
+    <title>
+      Website name tbd
+    </title>
+    
+    <!-- links to bootstrap and fontawesome as well as scripts for jquery, cloudflare and maxcdn.bootstrapcdn -->
+    <%= render "shared/bootstrapcdn_assets" %>
+    
     <%= csrf_meta_tags %>
 
-    <!-- Expand the number of characters we can use in the document beyond basic ASCII 🎉 -->
-    <meta charset="utf-8">
-
-    <!-- Connect Font Awesome CSS -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.2/css/all.css">
-
-    <!-- Connect Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-
-    <!-- Connect Bootstrap JavaScript and its dependencies -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    
     <!-- Make it responsive to small screens -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
+    <!-- characters beyond basic ASCII -->
+    <meta charset="utf-8">
+    <!-- another meta command -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <style>
+      body { padding-bottom: 70px }
+    </style>
+  
   </head>
 
   <body>
-    <%= yield %>
+    
+    <!-- navbar on top of website -->
+    <%= render "shared/navbar" %>
+    
+    <div class="container">
+      
+      <!-- flashes on top of html views -->
+      <%= render "shared/flashes" %>
+      
+      <!-- html views -->
+      <%= yield %>
+      
+    </div>
 
     <%= dev_tools if Rails.env.development? %>
   </body>

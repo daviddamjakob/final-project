@@ -1,0 +1,34 @@
+<h1>
+  Edit description #<%= @description.id %>
+</h1>
+
+<hr>
+
+<form action="/update_description/<%= @description.id %>" method="post">
+
+  <div class="form-group">
+    <label for="hashtag_id">
+      Hashtag
+    </label>
+
+    <input type="text" id="hashtag_id" name="hashtag_id" class="form-control" value="<%= @description.hashtag_id %>">
+  </div>
+
+  <div class="form-group">
+    <label for="article_id">
+      Article
+    </label>
+
+    <input type="text" id="article_id" name="article_id" class="form-control" value="<%= @description.article_id %>">
+  </div>
+
+  <button class="btn btn-block btn-outline-secondary">
+    Update description
+  </button>
+</form>
+
+<hr>
+
+<a href="/descriptions">
+  Go back
+</a>

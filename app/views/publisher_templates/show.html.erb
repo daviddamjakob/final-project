@@ -1,0 +1,51 @@
+<div class="row mb-3">
+  <div class="col-md-8 offset-md-2">
+    <h1>
+      Publisher #<%= @publisher.id %> details
+    </h1>
+
+    <div class="row mb-3">
+      <div class="col">
+        <a href="/publishers" class="btn btn-block btn-outline-secondary">
+          Go back
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="/publishers/<%= @publisher.id %>/edit" class="btn btn-block btn-outline-secondary">
+          Edit publisher
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="/delete_publisher/<%= @publisher.id %>" class="btn btn-block btn-outline-secondary">
+          Delete publisher
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Name
+      </dt>
+      <dd>
+        <%= @publisher.name %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@publisher.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@publisher.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+

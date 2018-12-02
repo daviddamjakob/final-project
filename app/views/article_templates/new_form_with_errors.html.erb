@@ -1,0 +1,78 @@
+<!-- Validation failure messages -->
+<% if @article.present? %>
+  <% if @article.errors.any? %>
+    <% @article.errors.full_messages.each do |message| %>
+      <div class="alert alert-danger">
+        <%= message %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h1>
+  Add a new article
+</h1>
+
+
+<hr>
+
+<form action="/create_article" method="post">
+
+  <div class="form-group">
+    <label for="link">
+      Link
+    </label>
+
+    <input type="text" id="link" name="link" class="form-control" value="<%= @article.link %>">
+  </div>
+
+  <div class="form-group">
+    <label for="caption">
+      Caption
+    </label>
+
+    <textarea id="caption" name="caption" class="form-control" rows="3"><%= @article.caption %></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="reading_time">
+      Reading time
+    </label>
+
+    <input type="text" id="reading_time" name="reading_time" class="form-control" value="<%= @article.reading_time %>">
+  </div>
+
+  <div class="form-group">
+    <label for="user_id">
+      User
+    </label>
+
+    <input type="text" id="user_id" name="user_id" class="form-control" value="<%= @article.user_id %>">
+  </div>
+
+  <div class="form-group">
+    <label for="author_id">
+      Author
+    </label>
+
+    <input type="text" id="author_id" name="author_id" class="form-control" value="<%= @article.author_id %>">
+  </div>
+
+  <div class="form-group">
+    <label for="publisher_id">
+      Publisher
+    </label>
+
+    <input type="text" id="publisher_id" name="publisher_id" class="form-control" value="<%= @article.publisher_id %>">
+  </div>
+
+  <button class="btn btn-block btn-outline-secondary">
+    Create article
+  </button>
+</form>
+
+<hr>
+
+<a href="/articles">
+  Go back
+</a>

@@ -1,0 +1,38 @@
+<!-- Validation failure messages -->
+<% if @publisher.present? %>
+  <% if @publisher.errors.any? %>
+    <% @publisher.errors.full_messages.each do |message| %>
+      <div class="alert alert-danger">
+        <%= message %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h1>
+  Add a new publisher
+</h1>
+
+
+<hr>
+
+<form action="/create_publisher" method="post">
+
+  <div class="form-group">
+    <label for="name">
+      Name
+    </label>
+
+    <textarea id="name" name="name" class="form-control" rows="3"><%= @publisher.name %></textarea>
+  </div>
+
+  <button class="btn btn-block btn-outline-secondary">
+    Create publisher
+  </button>
+</form>
+
+<hr>
+
+<a href="/publishers">
+  Go back
+</a>

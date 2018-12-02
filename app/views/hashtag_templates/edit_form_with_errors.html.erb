@@ -1,0 +1,34 @@
+<% if @hashtag.errors.any? %>
+  <% @hashtag.errors.full_messages.each do |message| %>
+    <div class="alert">
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<h1>
+  Edit hashtag #<%= @hashtag.id %>
+</h1>
+
+<hr>
+
+<form action="/update_hashtag/<%= @hashtag.id %>" method="post">
+
+  <div class="form-group">
+    <label for="tag">
+      Tag
+    </label>
+
+    <input type="text" id="tag" name="tag" class="form-control" value="<%= @hashtag.tag %>">
+  </div>
+
+  <button class="btn btn-block btn-outline-secondary">
+    Update hashtag
+  </button>
+</form>
+
+<hr>
+
+<a href="/hashtags">
+  Go back
+</a>

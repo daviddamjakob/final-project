@@ -1,0 +1,34 @@
+<h1>
+  Edit favorite #<%= @favorite.id %>
+</h1>
+
+<hr>
+
+<form action="/update_favorite/<%= @favorite.id %>" method="post">
+
+  <div class="form-group">
+    <label for="user_id">
+      User
+    </label>
+
+    <input type="text" id="user_id" name="user_id" class="form-control" value="<%= @favorite.user_id %>">
+  </div>
+
+  <div class="form-group">
+    <label for="article_id">
+      Article
+    </label>
+
+    <input type="text" id="article_id" name="article_id" class="form-control" value="<%= @favorite.article_id %>">
+  </div>
+
+  <button class="btn btn-block btn-outline-secondary">
+    Update favorite
+  </button>
+</form>
+
+<hr>
+
+<a href="/favorites">
+  Go back
+</a>

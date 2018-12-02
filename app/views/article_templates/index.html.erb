@@ -1,0 +1,106 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <h1>
+      All articles
+    </h1>
+
+    <a href="/articles/new" class="btn btn-block btn-outline-secondary">
+      Add a new article
+    </a>
+  </div>
+</div>
+
+
+<hr>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Link
+        </th>
+
+        <th>
+          Caption
+        </th>
+
+        <th>
+          Reading time
+        </th>
+
+        <th>
+          User
+        </th>
+
+        <th>
+          Author
+        </th>
+
+        <th>
+          Publisher
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @articles.each do |article| %>
+      <tr>
+        <td>
+          <%= article.id %>
+        </td>
+
+        <td>
+          <%= article.link %>
+        </td>
+
+        <td>
+          <%= article.caption %>
+        </td>
+
+        <td>
+          <%= article.reading_time %>
+        </td>
+
+        <td>
+          <%= article.user_id %>
+        </td>
+
+        <td>
+          <%= article.author_id %>
+        </td>
+
+        <td>
+          <%= article.publisher_id %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(article.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(article.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/articles/<%= article.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

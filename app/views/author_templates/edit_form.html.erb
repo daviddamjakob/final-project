@@ -1,0 +1,26 @@
+<h1>
+  Edit author #<%= @author.id %>
+</h1>
+
+<hr>
+
+<form action="/update_author/<%= @author.id %>" method="post">
+
+  <div class="form-group">
+    <label for="name">
+      Name
+    </label>
+
+    <textarea id="name" name="name" class="form-control" rows="3"><%= @author.name %></textarea>
+  </div>
+
+  <button class="btn btn-block btn-outline-secondary">
+    Update author
+  </button>
+</form>
+
+<hr>
+
+<a href="/authors">
+  Go back
+</a>
