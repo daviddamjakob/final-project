@@ -39,5 +39,6 @@ class User < ApplicationRecord
   # indirect associations
   has_many :bookmarked_articles, :through => :bookmarks, :source => :article
   has_many :favorite_articles, :through => :favorites, :source => :article
+  has_many :rated_articles, :through => :ratings, :source => :article
   
 end

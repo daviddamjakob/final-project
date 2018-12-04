@@ -27,7 +27,7 @@ class RatingsController < ApplicationController
     if @rating.valid?
       @rating.save
 
-      redirect_back(:fallback_location => "/ratings", :notice => "Rating created successfully.")
+      redirect_back(:fallback_location => "/articles", :notice => "Rating created successfully.")
     else
       render("rating_templates/new_form_with_errors.html.erb")
     end
@@ -60,6 +60,6 @@ class RatingsController < ApplicationController
 
     @rating.destroy
 
-    redirect_to("/ratings", :notice => "Rating deleted successfully.")
+    redirect_back(:fallback_location => "/articles", :notice => "Rating deleted successfully.")
   end
 end

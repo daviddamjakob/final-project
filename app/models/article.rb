@@ -32,5 +32,6 @@ class Article < ApplicationRecord
     # indirect associations
     has_many :future_reads, :through => :bookmarks, :source => :user
     has_many :fans, :through => :favorites, :source => :user
+    has_many :user_ratings, :through => :ratings, :source => :user
     
 end

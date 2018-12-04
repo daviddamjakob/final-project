@@ -26,7 +26,7 @@ class FavoritesController < ApplicationController
     if @favorite.valid?
       @favorite.save
 
-      redirect_back(:fallback_location => "/favorites", :notice => "Favorite created successfully.")
+      redirect_back(:fallback_location => "/articles", :notice => "Favorite created successfully.")
     else
       render("favorite_templates/new_form_with_errors.html.erb")
     end
@@ -58,6 +58,6 @@ class FavoritesController < ApplicationController
 
     @favorite.destroy
 
-    redirect_to("/favorites", :notice => "Favorite deleted successfully.")
+    redirect_back(:fallback_location => "/articles", :notice => "Favorite deleted successfully.")
   end
 end
