@@ -1,11 +1,12 @@
 <div class="container">
+  <!-- not even sure what this is there for -->
   <div class="row">
     <div class="col-md-12">
 
     </div>
   </div>
 
-  
+  <!-- New article button -->
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <a href="/articles/new" class="btn btn-primary btn-block">
@@ -14,8 +15,10 @@
       </a>
       <hr>
     </div> <!-- col -->
-  </div> <!-- row -->    
-  
+  </div> <!-- row -->
+
+
+
   <!-- looping through each article -->
   <% @articles.reverse_each do |article| %>
   
@@ -24,11 +27,14 @@
     <div class="row mb-5">
       <div class="col-md-8 offset-md-2">
         <div class="card">
+          
+          <!-- card title -->
           <div class="card-header">
               <h4 class="card-title">
                   static title (tbr)
               </h4>
           </div> <!-- card header -->
+          
           <div class="card-body">
               <!-- snippet of article + desciption with link to website -->
               <!-- still need to look into video compatibility -->
@@ -37,10 +43,12 @@
               </a>
               
               
-              <!-- start of the shared part -->
               <ul class="list-unstyled pl-4 pr-4 pt-2">
                 
+                <!-- row for rating, bookmarking + fav -->
                 <div class="row">
+                  
+                  <!-- rating column -->
                   <div class="col-md-8">
                     
                     <!-- computing average rating per article -->
@@ -158,9 +166,9 @@
                     <% end %>   
                   </div> <!-- col-md-8 for star rating -->
                   
-                  <!-- bookmarking -->
-                  <% if article.future_reads.where(:id => current_user.id).count == 0 %>
-                    <div class="col-md-1 offset-md-2">
+                  <!-- bookmarking column -->
+                  <div class="col-md-1 offset-md-2">
+                    <% if article.future_reads.where(:id => current_user.id).count == 0 %>
                       <form action="/create_bookmark" method="post">
                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
                           <i class="far fa-bookmark fa-1x"></i>
@@ -168,20 +176,18 @@
                         <input type="hidden" name="user_id" value="<%=current_user.id%>">
                         <input type="hidden" name="article_id" value="<%=article.id%>">
                       </form>
-                    </div> <!-- bookmark column if case 1 -->
-                  <% else %>
-                    <div class="col-md-1 offset-md-2">
+                    <% else %>
                       <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
                           <i class="fas fa-bookmark fa-1x"></i>
                         </button>
                       </a>
-                    </div>
-                  <% end %> <!-- bookmark column if case 2 -->
+                    <% end %> <!-- bookmark column if case 2 -->
+                  </div>
                   
                   <!-- adding to favorites -->
-                  <% if article.fans.where(:id => current_user.id).count == 0 %>
-                    <div class="col-md-1">
+                  <div class="col-md-1">
+                    <% if article.fans.where(:id => current_user.id).count == 0 %>
                       <form action="/create_favorite" method="post">
                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
                           <i class="far fa-thumbs-up"></i>
@@ -189,18 +195,17 @@
                         <input type="hidden" name="user_id" value="<%=current_user.id%>">
                         <input type="hidden" name="article_id" value="<%=article.id%>">
                       </form>
-                    </div> <!-- fav column if case 1 -->
-                  <% else %>
-                    <div class="col-md-1">
+                    <% else %>
                       <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
                           <i class="fas fa-thumbs-up fa-1x"></i>
                         </button>
                       </a>
-                    </div>
-                  <% end %> <!-- fav column if case 2 -->
+                    <% end %> 
+                  </div> <!-- fav column -->
                 </div> <!-- row for rating, bookmark, fav -->
                 
+                <!-- row for user who posted and caption -->
                 <div class="row">
                   <div class="col-md-12 pt-2">
                   <p><em>
@@ -215,7 +220,7 @@
                 </div>
                 
                 
-                <!-- comments-->
+                <!-- rows for comments-->
                 <% article.comments.each do |comment|%>
                   <div class="row">
                     <div class="col-md-12" style="line-height:1">
@@ -255,7 +260,6 @@
                 
                  <!-- delete and edit options-->
                 <% if article.user_id == current_user.id%>
-                
                   <div class="btn-group d-flex" role="group">
                     <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100">
                       <i class="fas fa-edit"></i>
