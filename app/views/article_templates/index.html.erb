@@ -36,173 +36,173 @@
                 Placeholder for picture link
               </a>
               
-              <div class="row">
-                <div class="col-md-8">
-                  
-                  <!-- computing average rating per article -->
-                  <% ratings_count = article.ratings.count %>
-                  <% if ratings_count > 0 %>
-                    <% sum=0 %>
-                    <% article.ratings.each do |i|%>
-                     <% sum += i.score %>
-                    <% end %>
-                    <% rating_avg = sum / ratings_count%>
-                  <% else %>
-                    <% rating_avg = 0 %>
-                  <% end %>
-                  
-                  <!-- if current user has already rated an article -->
-                  <% if article.user_ratings.where(:id => current_user.id).count != 0 %>
-                    <br/>
-                    <!-- first star -->
-                    <% if rating_avg == 0%>
-                      <i class="far fa-star"></i>
-                    <% else %>
-                      <i class="fas fa-star"></i>
-                    <% end %>
-                    <!-- second star -->
-                    <% if rating_avg <= 2 %>
-                      <i class="far fa-star"></i>
-                    <% elsif rating_avg == 3 %>
-                      <i class="fas fa-star-half"></i>
-                    <% else %>
-                      <i class="fas fa-star"></i>
-                    <% end %>
-                    <!-- third star star -->
-                    <% if rating_avg <= 4 %>
-                      <i class="far fa-star"></i>
-                    <% elsif rating_avg == 5 %>
-                      <i class="fas fa-star-half"></i>
-                    <% else %>
-                      <i class="fas fa-star"></i>
-                    <% end %>
-                    <!-- fourth star star -->
-                    <% if rating_avg <= 6 %>
-                      <i class="far fa-star"></i>
-                    <% elsif rating_avg == 7 %>
-                      <i class="fas fa-star-half"></i>
-                    <% else %>
-                      <i class="fas fa-star"></i>
-                    <% end %>
-                    <!-- fifth star star -->
-                    <% if rating_avg <= 8 %>
-                      <i class="far fa-star"></i>
-                    <% elsif rating_avg == 9 %>
-                      <i class="fas fa-star-half"></i>
-                    <% else %>
-                      <i class="fas fa-star"></i>
-                    <% end %>
-                    <a href="delete_rating/<%=Rating.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" style="color:grey"> (Unrate)</a>
-                    
-                  <!-- if current user has not yet rated an article -->
-                  <% else %>
-                    <form action="/create_rating" method="post">
-                       <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="2">
-                         <% if rating_avg == 0%>
-                           <i class="far fa-star"></i>
-                         <% else %>
-                           <i class="fas fa-star"></i>
-                         <% end %>
-                       </button>
-                       <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="4">
-                         <% if rating_avg <= 2 %>
-                           <i class="far fa-star"></i>
-                         <% elsif rating_avg == 3 %>
-                           <i class="fas fa-star-half"></i>
-                         <% else %>
-                           <i class="fas fa-star"></i>
-                         <% end %>
-                       </button>
-                       <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="6">
-                         <% if rating_avg <= 4 %>
-                           <i class="far fa-star"></i>
-                         <% elsif rating_avg == 5 %>
-                           <i class="fas fa-star-half"></i>
-                         <% else %>
-                           <i class="fas fa-star"></i>
-                         <% end %>
-                       </button>
-                       <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="8">
-                         <% if rating_avg <= 6 %>
-                           <i class="far fa-star"></i>
-                         <% elsif rating_avg == 7 %>
-                           <i class="fas fa-star-half"></i>
-                         <% else %>
-                           <i class="fas fa-star"></i>
-                         <% end %>
-                       </button>
-                       <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="10">
-                         <% if rating_avg <= 8 %>
-                           <i class="far fa-star"></i>
-                         <% elsif rating_avg == 9 %>
-                           <i class="fas fa-star-half"></i>
-                         <% else %>
-                           <i class="fas fa-star"></i>
-                         <% end %>
-                       </button>
-                       <a style="color:grey">
-                         <% if ratings_count == 0 %>
-                           (no ratings yet)
-                         <% elsif ratings_count == 1 %>
-                           (<%=article.ratings.count%> rating)
-                         <% else %>
-                           (<%=article.ratings.count%> ratings)
-                         <% end %>
-                       </a>
-                       <input type="hidden" name="user_id" value="<%=current_user.id%>">
-                       <input type="hidden" name="article_id" value="<%=article.id%>">
-                    </form>
-                  <% end %>   
-                </div> <!-- col-md-8 for star rating -->
-                
-                <!-- bookmarking -->
-                <% if article.future_reads.where(:id => current_user.id).count == 0 %>
-                  <div class="col-md-1 offset-md-2">
-                    <form action="/create_bookmark" method="post">
-                      <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                        <i class="far fa-bookmark fa-1x"></i>
-                      </button>
-                      <input type="hidden" name="user_id" value="<%=current_user.id%>">
-                      <input type="hidden" name="article_id" value="<%=article.id%>">
-                    </form>
-                  </div> <!-- bookmark column if case 1 -->
-                <% else %>
-                  <div class="col-md-1 offset-md-2">
-                    <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
-                      <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                        <i class="fas fa-bookmark fa-1x"></i>
-                      </button>
-                    </a>
-                  </div>
-                <% end %> <!-- bookmark column if case 2 -->
-                
-                <!-- adding to favorites -->
-                <% if article.fans.where(:id => current_user.id).count == 0 %>
-                  <div class="col-md-1">
-                    <form action="/create_favorite" method="post">
-                      <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                        <i class="far fa-thumbs-up"></i>
-                      </button>
-                      <input type="hidden" name="user_id" value="<%=current_user.id%>">
-                      <input type="hidden" name="article_id" value="<%=article.id%>">
-                    </form>
-                  </div> <!-- fav column if case 1 -->
-                <% else %>
-                  <div class="col-md-1">
-                    <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
-                      <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                        <i class="fas fa-thumbs-up fa-1x"></i>
-                      </button>
-                    </a>
-                  </div>
-                <% end %> <!-- fav column if case 2 -->
-              </div> <!-- row for rating, bookmark, fav -->
-              
               
               <!-- start of the shared part -->
               <ul class="list-unstyled pl-4 pr-4 pt-2">
-                <li class="media mb-2">
-                  <div class="media-body">
+                
+                <div class="row">
+                  <div class="col-md-8">
+                    
+                    <!-- computing average rating per article -->
+                    <% ratings_count = article.ratings.count %>
+                    <% if ratings_count > 0 %>
+                      <% sum=0 %>
+                      <% article.ratings.each do |i|%>
+                       <% sum += i.score %>
+                      <% end %>
+                      <% rating_avg = sum / ratings_count%>
+                    <% else %>
+                      <% rating_avg = 0 %>
+                    <% end %>
+                    
+                    <!-- if current user has already rated an article -->
+                    <% if article.user_ratings.where(:id => current_user.id).count != 0 %>
+                      <!-- first star -->
+                      <% if rating_avg == 0%>
+                        <i class="far fa-star"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- second star -->
+                      <% if rating_avg <= 2 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 3 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- third star star -->
+                      <% if rating_avg <= 4 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 5 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- fourth star star -->
+                      <% if rating_avg <= 6 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 7 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- fifth star star -->
+                      <% if rating_avg <= 8 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 9 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <a href="delete_rating/<%=Rating.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" style="color:grey"> (Unrate)</a>
+                      
+                    <!-- if current user has not yet rated an article -->
+                    <% else %>
+                      <form action="/create_rating" method="post">
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="2">
+                           <% if rating_avg == 0%>
+                             <i class="far fa-star"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="4">
+                           <% if rating_avg <= 2 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 3 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="6">
+                           <% if rating_avg <= 4 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 5 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="8">
+                           <% if rating_avg <= 6 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 7 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="10">
+                           <% if rating_avg <= 8 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 9 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <a style="color:grey">
+                           <% if ratings_count == 0 %>
+                             (no ratings yet)
+                           <% elsif ratings_count == 1 %>
+                             (<%=article.ratings.count%> rating)
+                           <% else %>
+                             (<%=article.ratings.count%> ratings)
+                           <% end %>
+                         </a>
+                         <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                         <input type="hidden" name="article_id" value="<%=article.id%>">
+                      </form>
+                    <% end %>   
+                  </div> <!-- col-md-8 for star rating -->
+                  
+                  <!-- bookmarking -->
+                  <% if article.future_reads.where(:id => current_user.id).count == 0 %>
+                    <div class="col-md-1 offset-md-2">
+                      <form action="/create_bookmark" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="far fa-bookmark fa-1x"></i>
+                        </button>
+                        <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                        <input type="hidden" name="article_id" value="<%=article.id%>">
+                      </form>
+                    </div> <!-- bookmark column if case 1 -->
+                  <% else %>
+                    <div class="col-md-1 offset-md-2">
+                      <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="fas fa-bookmark fa-1x"></i>
+                        </button>
+                      </a>
+                    </div>
+                  <% end %> <!-- bookmark column if case 2 -->
+                  
+                  <!-- adding to favorites -->
+                  <% if article.fans.where(:id => current_user.id).count == 0 %>
+                    <div class="col-md-1">
+                      <form action="/create_favorite" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="far fa-thumbs-up"></i>
+                        </button>
+                        <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                        <input type="hidden" name="article_id" value="<%=article.id%>">
+                      </form>
+                    </div> <!-- fav column if case 1 -->
+                  <% else %>
+                    <div class="col-md-1">
+                      <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="fas fa-thumbs-up fa-1x"></i>
+                        </button>
+                      </a>
+                    </div>
+                  <% end %> <!-- fav column if case 2 -->
+                </div> <!-- row for rating, bookmark, fav -->
+                
+                <div class="row">
+                  <div class="col-md-12 pt-2">
                   <p><em>
                       <small>shared by</small>
                       <a href="/users/<%=article.user.id%>"><%=article.user.username%></a>
@@ -210,21 +210,22 @@
                     </em><br/>
                     <%=article.caption%>
                   </p>
+                  <hr>
                   </div>
-                </li>
-                <hr>
+                </div>
+                
                 
                 <!-- comments-->
                 <% article.comments.each do |comment|%>
-                  <li class="media" style="line-height:85%">
-                    <div class="media-body">
-                      <p><em>
+                  <div class="row">
+                    <div class="col-md-12" style="line-height:1">
+                      <p style="margin-bottom:5px"><em>
                           <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
                         </em>
                         <small> >> <%=comment.body%></small>
                       </p>
                     </div>
-                  </li>
+                  </div>
                 <% end%>
               
                 <!-- adding a comment-->
