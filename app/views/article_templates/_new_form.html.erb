@@ -42,12 +42,15 @@
       <input type="text" id="reading_time" name="reading_time" class="form-control" value="<%= @article.try(:reading_time)%>" placeholder="in minutes, e.g. 4">
     </div>
     
-    <input type="hidden" name="user_id" value="<%=current_user.id%>"
+    <input type="hidden" name="user_id" value="<%=current_user.id%>">
     
+    <div class="modal-footer">
+  
+      <button class="btn btn-primary" type="submit">Share content</button>
+      
+    </div>
   </form>  
 </div>
 
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-  <button type="button" class="btn btn-primary">Share content</button>
-</div>
+
+  

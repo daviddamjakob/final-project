@@ -14,9 +14,7 @@
 #  tc_image       :string
 #  tc_card        :string
 #  tc_title       :text
-#  tc_creator     :text
 #  tc_description :text
-#  tc_site        :text
 #
 
 class Article < ApplicationRecord
