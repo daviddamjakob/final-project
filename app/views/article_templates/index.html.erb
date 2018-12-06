@@ -9,13 +9,22 @@
   <!-- New article button -->
   <div class="row">
     <div class="col-md-8 offset-md-2">
-      <a href="/articles/new" class="btn btn-primary btn-block">
+      <a href="/articles/new" class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">
         <i class="fa fa-fw fa-plus"></i>
         Share an article
       </a>
       <hr>
     </div> <!-- col -->
   </div> <!-- row -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <%= render "article_templates/new_form" %>
+      </div>
+    </div>
+</div>
 
 
 
@@ -31,17 +40,35 @@
           <!-- card title -->
           <div class="card-header">
               <h4 class="card-title">
-                  static title (tbr)
+                  <%= article.tc_title %>
               </h4>
           </div> <!-- card header -->
           
           <div class="card-body">
-              <!-- snippet of article + desciption with link to website -->
-              <!-- still need to look into video compatibility -->
-              <a href="<%=article.link%>">
-                Placeholder for picture link
-              </a>
-              
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- snippet of article + desciption with link to website -->
+                  <!-- still need to look into video compatibility -->
+                  <% if article.tc_card == "summary_large_image"%>
+                    <a href="<%=article.link%>">
+                      <img src="<%=article.tc_image%>" class="img-fluid pl-4 pr-4">
+                      <% if article.tc_description.blank? == false %>
+                        <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                          <small style="color:grey"><%=article.tc_description%></small>
+                        </span>
+                      <% end %>
+                    </a>
+                  <% elsif article.tc_description.blank? == false %>
+                    <a href="<%=article.link%>">
+                      <small style="color:grey"><%=article.tc_description%></small>
+                    </a>
+                  <% else %>
+                    <a href="<%=article.link%>">
+                      <span><small style="color:grey">find the article here</small></span>
+                    </a>
+                  <% end %>
+                </div> <!-- col for pic and description -->
+              </div> <!-- row for pic and description -->
               
               <ul class="list-unstyled pl-4 pr-4 pt-2">
                 

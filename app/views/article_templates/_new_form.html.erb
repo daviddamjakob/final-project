@@ -1,0 +1,53 @@
+<!-- Validation failure messages -->
+<% if @article.present? %>
+  <% if @article.errors.any? %>
+    <% @article.errors.full_messages.each do |message| %>
+      <div class="alert alert-danger">
+        <%= message %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Share some content you stumbled upon</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form action="/create_article" method="post">
+    
+    <div class="form-group">
+      <label for="link">
+        Link
+      </label>
+      <input type="text" id="link" name="link" class="form-control" value="<%= @article.try(:link)%>" placeholder="e.g. https://blog.richmond.edu/heroes/2013/05/11/10-ways-you-can-become-a-hero-in-2013/">
+    </div>
+    
+    <div class="form-group">
+      <label for="caption">
+        Caption
+      </label>
+  
+      <textarea id="caption" name="caption" class="form-control" rows="3" placeholder="What are your thoughts on the topic?"><%= @article.try(:caption)%></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label for="reading_time">
+        Reading time
+      </label>
+    
+      <input type="text" id="reading_time" name="reading_time" class="form-control" value="<%= @article.try(:reading_time)%>" placeholder="in minutes, e.g. 4">
+    </div>
+    
+    <input type="hidden" name="user_id" value="<%=current_user.id%>"
+    
+  </form>  
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary">Share content</button>
+</div>

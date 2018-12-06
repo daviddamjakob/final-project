@@ -20,12 +20,24 @@ class ArticlesController < ApplicationController
   def create_row
     @article = Article.new
 
-    @article.link = params.fetch("link")
+    link = params.fetch("link")
+    @article.link = link
     @article.caption = params.fetch("caption")
     @article.reading_time = params.fetch("reading_time")
     @article.user_id = params.fetch("user_id")
     @article.author_id = params.fetch("author_id")
     @article.publisher_id = params.fetch("publisher_id")
+    
+    @article.tc_image = Bateman::TwitterCard.new(link).image
+    # there are four different card options: summary, summary_large_image, player and app
+    # summary has no image, player is a video link, app links an app (not essential here)
+    # Youtube videos work with iFrame, other videos with video tag
+    @article.tc_card = Bateman::TwitterCard.new(link).card
+    @article.tc_title = Bateman::TwitterCard.new(link).title
+    @article.tc_creator = Bateman::TwitterCard.new(link).creator
+    @article.tc_description = Bateman::TwitterCard.new(link).description
+    @article.tc_site = Bateman::TwitterCard.new(link).site
+    
 
     if @article.valid?
       @article.save
