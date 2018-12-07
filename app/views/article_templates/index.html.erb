@@ -9,7 +9,7 @@
   <!-- New article button -->
   <div class="row">
     <div class="col-md-8 offset-md-2">
-      <a href="/articles/new" class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">
+      <a href="/articles/new" class="btn btn-primary btn-block" data-toggle="modal" data-target="#newFormModal">
         <i class="fa fa-fw fa-plus"></i>
         Share an article
       </a>
@@ -17,8 +17,8 @@
     </div> <!-- col -->
   </div> <!-- row -->
   
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- new form Modal -->
+  <div class="modal fade" id="newFormModal" tabindex="-1" role="dialog" aria-labelledby="newFormModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <%= render "article_templates/new_form" %>
@@ -288,7 +288,7 @@
                  <!-- delete and edit options-->
                 <% if article.user_id == current_user.id%>
                   <div class="btn-group d-flex" role="group">
-                    <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100">
+                    <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100" data-toggle="modal" data-target="#editFormModal<%=article.id%>">
                       <i class="fas fa-edit"></i>
                       Edit
                     </a>
@@ -298,6 +298,18 @@
                     </a>
                   </div>
                 <% end%>
+                
+                <!-- edit form Modal -->
+                <div class="modal fade" id="editFormModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="editFormModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      
+                      <%= render :partial => "article_templates/edit_form", :locals => {:article => article} %>
+                      
+                      
+                    </div>
+                  </div>
+                </div>
                 
               </ul>
             </div> <!-- card body -->

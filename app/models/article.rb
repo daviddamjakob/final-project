@@ -22,6 +22,7 @@ class Article < ApplicationRecord
     # validations
     validates :user_id, :presence => true
     validates :link, :presence => true
+    validates :link, :format => URI::regexp(%w(http https))
     
     # direct associations
     belongs_to :user
