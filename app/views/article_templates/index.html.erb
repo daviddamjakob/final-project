@@ -39,10 +39,22 @@
           
           <!-- card title -->
           <div class="card-header">
-              <h4 class="card-title">
+              <a href="not important" style="color:black" data-toggle="modal" data-target="#showModal<%=article.id%>">
+                <h4 class="card-title">
                   <%= article.tc_title %>
-              </h4>
+              </h4></a>
           </div> <!-- card header -->
+          
+          <!-- show form Modal -->
+          <div class="modal fade" id="showModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="showModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                
+                <%= render :partial => "article_templates/show", :locals => {:article => article} %>
+              </div>
+            </div>
+          </div>
+          
           
           <div class="card-body">
               <div class="row">
