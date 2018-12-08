@@ -241,6 +241,11 @@
                       <small> (<%= time_ago_in_words(article.created_at) %><%=%> ago)</small>
                     </em><br/>
                     <%=article.caption%>
+                    <%article.descriptions.each do |element|%>
+                      <a href="/hashtags/<%=element.hashtag_id%>">
+                        <%=Hashtag.find(element.hashtag_id).tag%>
+                      </a>
+                    <%end%>
                   </p>
                   <hr>
                   </div>

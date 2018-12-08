@@ -7,7 +7,6 @@
 #  caption        :text
 #  reading_time   :integer
 #  user_id        :integer
-#  author_id      :integer
 #  publisher_id   :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -15,6 +14,8 @@
 #  tc_card        :string
 #  tc_title       :text
 #  tc_description :text
+#  author_id      :integer
+#  hashtags_input :text
 #
 
 class Article < ApplicationRecord

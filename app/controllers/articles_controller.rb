@@ -27,6 +27,9 @@ class ArticlesController < ApplicationController
     @article.reading_time = params.fetch("reading_time")
     @article.user_id = params.fetch("user_id")
     
+    @article.hashtags_input = params.fetch("hashtags")
+    
+    
     if @article.valid?
       
       # link to Github of Twittercard -> https://github.com/geoffharcourt/bateman
@@ -65,6 +68,30 @@ class ArticlesController < ApplicationController
       
       
       @article.save
+      
+      # hashtags (have to be placed here because only now there is an article id)
+      hashtag_array = @article.hashtags_input.split
+      # check whether hashtag starts with #
+      # for correct hashtags, check whether tag already exists in table
+      # if not, create new entry
+      # for correct hashtags, create new entry in description table
+      hashtag_array.each do |hashtag|
+        if hashtag[0] == "#"
+          # create new hashtag entry if necessary
+          if Hashtag.where(:tag => hashtag).blank?
+            hashtag_new = Hashtag.new
+            hashtag_new.tag = hashtag
+            hashtag_new.save
+          end
+          # create new association between hashtag and article
+          description_new = Description.new
+          description_new.hashtag_id = Hashtag.where(:tag => hashtag)[0].id
+          description_new.article_id = @article.id
+          description_new.save
+        end
+      end
+      
+      
       # cannot use redirect_back because it causes GET error when coming via new_with_errors form
       redirect_to("/articles", :notice => "Article created successfully.")
     
@@ -83,13 +110,44 @@ class ArticlesController < ApplicationController
 
   def update_row
     
-    @article = Article.find(params.fetch("id_to_modify"))
+    article_id = params.fetch("id_to_modify")
+    @article = Article.find(article_id)
     @article.link = params.fetch("link")
     @article.caption = params.fetch("caption")
     @article.reading_time = params.fetch("reading_time")
     @article.user_id = params.fetch("user_id")
     
+    @article.hashtags_input = params.fetch("hashtags")
+    
     if @article.valid?
+      
+      # chaning the associated hashtags
+      # must be done before saving so old tags can still be read
+      hashtags_old = Article.find(article_id).hashtags_input.split
+      hashtags_new = @article.hashtags_input.split
+      
+      hashtags_deleted = hashtags_old - hashtags_new
+      hashtags_added = hashtags_new - hashtags_old
+      
+      # destroy all descriptions rows associated with deleted hashtags for article
+      hashtags_deleted.each do |hashtag|
+        Description.where(:hashtag_id => Hashtag.where(:tag => hashtag)[0].id, :article_id => article_id)[0].destroy
+      end
+      
+      # add new descriptions rows for new hashtag associations
+      # if hashtag does not exist yet, then create it
+      hashtags_added.each do |hashtag|
+        if Hashtag.where(:tag => hashtag).empty?
+          hashtag_new = Hashtag.new
+          hashtag_new.tag = hashtag
+          hashtag_new.save
+        end
+        description_new = Description.new
+        description_new.article_id = article_id
+        description_new.hashtag_id = Hashtag.where(:tag => hashtag)[0].id
+        description_new.save
+      end
+      
       @article.save
 
       redirect_to("/articles", :notice => "Article updated successfully.")
