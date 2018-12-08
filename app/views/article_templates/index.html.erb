@@ -265,16 +265,35 @@
                 
                 
                 <!-- rows for comments-->
-                <% article.comments.each do |comment|%>
+                <% if article.comments.length == 0 %>
+                <% elsif article.comments.length == 1 %>
+                  <%comment = article.comments[-1]%>
                   <div class="row">
                     <div class="col-md-12" style="line-height:1">
                       <p style="margin-bottom:5px"><em>
                           <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
                         </em>
-                        <small> >> <%=comment.body%></small>
+                        >> <%=comment.body%>
                       </p>
                     </div>
                   </div>
+                <% else %>
+                  <% article.comments[-2..-1].reverse_each do |comment|%>
+                    <div class="row">
+                      <div class="col-md-12" style="line-height:1">
+                        <p style="margin-bottom:5px"><em>
+                            <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
+                          </em>
+                          >> <%=comment.body%>
+                        </p>
+                      </div>
+                    </div>
+                  <% end%>
+                  <%if article.comments.length > 2%>
+                    <a href="not important" data-toggle="modal" data-target="#showModal<%=article.id%>">
+                      <small>// show all comments</small>
+                    </a>
+                  <%end%>
                 <% end%>
               
                 <!-- adding a comment-->

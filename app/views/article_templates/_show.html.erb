@@ -18,7 +18,7 @@
             <a href="<%=article.link%>">
               <img src="<%=article.tc_image%>" class="img-fluid pl-4 pr-4">
               <% if article.tc_description.blank? == false %>
-                <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                <span class="d-none d-sm-block pl-4 pr-4 pt-1">
                   <small style="color:grey"><%=article.tc_description%></small>
                 </span>
               <% end %>
@@ -37,8 +37,44 @@
       
       <ul class="list-unstyled pl-4 pr-4 pt-2">
 
-        <!-- row for rating, bookmarking + fav -->
+        <!-- row for reading time, source and author -->
         <div class="row">
+          
+          <div class="col-md-12"><small>
+            <!-- reading time --><a>
+              reading time: 
+              <% if article.reading_time == nil%>
+                n/a
+              <% else %>
+                ~ <%=article.reading_time%> min
+              <% end %>
+            </a>
+            <!-- source --><a>
+               | source: 
+              <% if article.publisher_id == nil %>
+                n/a
+              <% else %>
+                <a href="/publishers/<%=article.publisher_id%>">
+                  <%= Publisher.find(article.publisher_id).name %>
+                </a>
+              <% end %>
+            </a>
+            <!-- author --><a>
+               | author: 
+              <% if article.author_id == nil %>
+                n/a
+              <% else %>
+                <a href="/authors/<%=article.author_id%>">
+                  <%= Author.find(article.author_id).name %>
+                </a>
+              <% end %>
+            </a>
+          </small></div> <!-- col reading time, source and author -->
+          
+        </div> <!-- row reading time,source and author -->
+        
+        <!-- row for rating, bookmarking + fav -->
+        <small><div class="row">
           
           <!-- rating column -->
           <div class="col-md-8">
@@ -158,44 +194,9 @@
             <% end %>   
           </div> <!-- col-md-8 for star rating -->
           
-          <!-- bookmarking column -->
-          <div class="col-md-1 offset-md-2">
-            <% if article.future_reads.where(:id => current_user.id).count == 0 %>
-              <form action="/create_bookmark" method="post">
-                <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                  <i class="far fa-bookmark fa-1x"></i>
-                </button>
-                <input type="hidden" name="user_id" value="<%=current_user.id%>">
-                <input type="hidden" name="article_id" value="<%=article.id%>">
-              </form>
-            <% else %>
-              <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
-                <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                  <i class="fas fa-bookmark fa-1x"></i>
-                </button>
-              </a>
-            <% end %> <!-- bookmark column if case 2 -->
-          </div>
           
-          <!-- adding to favorites -->
-          <div class="col-md-1">
-            <% if article.fans.where(:id => current_user.id).count == 0 %>
-              <form action="/create_favorite" method="post">
-                <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                  <i class="far fa-thumbs-up"></i>
-                </button>
-                <input type="hidden" name="user_id" value="<%=current_user.id%>">
-                <input type="hidden" name="article_id" value="<%=article.id%>">
-              </form>
-            <% else %>
-              <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
-                <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
-                  <i class="fas fa-thumbs-up fa-1x"></i>
-                </button>
-              </a>
-            <% end %> 
-          </div> <!-- fav column -->
-        </div> <!-- row for rating, bookmark, fav -->
+        </div></small> <!-- row for rating, bookmark, fav -->
+          
         
         <!-- row for user who posted and caption -->
         <div class="row">
@@ -255,30 +256,40 @@
           </div> <!-- media-body -->
         </li>
         
-         <!-- delete and edit options-->
-        <% if article.user_id == current_user.id%>
-          <div class="btn-group d-flex" role="group">
-            <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100" data-toggle="modal" data-target="#editFormModal<%=article.id%>">
-              <i class="fas fa-edit"></i>
-              Edit
-            </a>
-            <a href="/delete_article/<%=article.id%>" class="btn btn-danger w-100" rel="nofollow">
-              <i class="fas fa-trash"></i>
-              Delete
-            </a>
-          </div>
-        <% end%>
+         <!-- bookmarking and adding to favorites options-->
         
-        <!-- edit form Modal -->
-        <div class="modal fade" id="editFormModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="editFormModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              
-              <%= render :partial => "article_templates/edit_form", :locals => {:article => article} %>
-              
-              
-            </div>
-          </div>
+        <div class="btn-group d-flex" role="group">
+          <% if article.future_reads.where(:id => current_user.id).count == 0 %>
+            <form action="/create_bookmark" method="post">
+              <button type="submit" class="btn btn-warning w-100">
+                <i class="far fa-bookmark fa-1x"></i> Add to Bookmarks
+              </button>
+              <input type="hidden" name="user_id" value="<%=current_user.id%>">
+              <input type="hidden" name="article_id" value="<%=article.id%>">
+            </form>
+          <% else %>
+            <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+              <button type="submit" class="btn btn-warning w-100">
+                <i class="fas fa-bookmark fa-1x"></i> Delete Bookmark
+              </button>
+            </a>
+          <% end %> <!-- bookmark column if case 2 -->
+          
+          <% if article.fans.where(:id => current_user.id).count == 0 %>
+            <form action="/create_favorite" method="post">
+              <button type="submit" class="btn btn-danger w-100" rel="nofollow">
+                <i class="far fa-thumbs-up"></i> Add to Favorites
+              </button>
+              <input type="hidden" name="user_id" value="<%=current_user.id%>">
+              <input type="hidden" name="article_id" value="<%=article.id%>">
+            </form>
+          <% else %>
+            <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+              <button type="submit" class="btn btn-danger w-100" rel="nofollow">
+                <i class="fas fa-thumbs-up fa-1x"></i> Delete from Favorites
+              </button>
+            </a>
+          <% end %> 
         </div>
         
       </ul>
