@@ -71,9 +71,13 @@
                     </a>
                   <!-- player is associated with videos -->
                   <% elsif article.tc_card == "player"%>
-                    <iframe width="420" height="315"
-                      src="https://youtube.com/embed/6wm-NtMkqz8">
-                    </iframe>
+                      <!-- only Youtube videos work so far -->
+                      <div class="embed-responsive embed-responsive-16by9">
+                        <iframe width="420" height="315"
+                          src="https://www.youtube.com/embed/<%=YoutubeID.from(article.link)%>" class="embed-responsive-item  pl-4 pr-4">
+                        </iframe>
+                      </div>
+                    <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
                       <span class="d-none d-lg-block pl-4 pr-4 pt-1">
                         <small style="color:grey"><%=article.tc_description%></small>
                       </span>
