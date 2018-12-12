@@ -7,6 +7,7 @@ class HashtagsController < ApplicationController
 
   def show
     @hashtag = Hashtag.find(params.fetch("id_to_display"))
+    @articles = @hashtag.related_articles
 
     render("hashtag_templates/show.html.erb")
   end

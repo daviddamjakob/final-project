@@ -7,6 +7,7 @@ class AuthorsController < ApplicationController
 
   def show
     @author = Author.find(params.fetch("id_to_display"))
+    @articles = @author.articles
 
     render("author_templates/show.html.erb")
   end

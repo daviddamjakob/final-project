@@ -17,4 +17,7 @@ class Hashtag < ApplicationRecord
     # direct associations
     has_many :descriptions, :dependent => :destroy
     
+    # indirect associations
+    has_many :related_articles, :through => :descriptions, :source => :article
+    
 end

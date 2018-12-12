@@ -1,74 +1,352 @@
-<div class="row mb-3">
-  <div class="col-md-12">
-    <h1>
-      All favorites
-    </h1>
+<div class="container">
+  <!-- not even sure what this is there for -->
+  <div class="row">
+    <div class="col-md-12">
 
-    <a href="/favorites/new" class="btn btn-block btn-outline-secondary">
-      Add a new favorite
-    </a>
+    </div>
   </div>
-</div>
 
-
-<hr>
-
-<div class="row mb-3">
-  <div class="col-md-12">
-    <table class="table">
-      <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          User
-        </th>
-
-        <th>
-          Article
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
-      </tr>
-
-      <% @favorites.each do |favorite| %>
-      <tr>
-        <td>
-          <%= favorite.id %>
-        </td>
-
-        <td>
-          <%= favorite.user_id %>
-        </td>
-
-        <td>
-          <%= favorite.article_id %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(favorite.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(favorite.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/favorites/<%= favorite.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
-      <% end %>
-    </table>
+  <div class="row mb-4">
+    <div class="col-md-8 offset-md-2">
+      <div class="alert alert-success" role="alert">
+        <h5>A list of all your favorite articles - just for you, @<%=current_user.username%></h5>
+        <%articles_count = @favorites.count%>
+        <%if articles_count == 0%>
+          You don't seem to have any favorite articles as of now. Either you're simply not into the shared content (which we would deeply regret), or you just haven't started hitting that thumbs-up button yet 🔥🔥🔥.
+        <%elsif articles_count == 1%>
+          Currently, there is one article on your favorite list. Let's add some more to this 🔝🔝🔝.
+        <%else%>
+          You seem to be into the content shared on KnowledgeSwipe, there are <%=articles_count%> articles on your favorite list. Keep it up 💪.
+        <%end%>
+      </div>
+    </div>
   </div>
+
+
+
+  <!-- looping through each bookmarked article -->
+  <% @favorites.reverse_each do |favorite| %>
+    
+    <% article = Article.find(favorite.article_id) %>
+    
+    <div class="row mb-5">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          
+          <!-- card title -->
+          <div class="card-header">
+              <a href="not important" style="color:black" data-toggle="modal" data-target="#showModal<%=article.id%>">
+                <h4 class="card-title">
+                  <%= article.tc_title %>
+              </h4></a>
+          </div> <!-- card header -->
+          
+          <!-- show form Modal -->
+          <div class="modal fade" id="showModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="showModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                
+                <%= render :partial => "article_templates/show", :locals => {:article => article} %>
+              </div>
+            </div>
+          </div>
+          
+          
+          <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- snippet of article + desciption with link to website -->
+                  <!-- still need to look into video compatibility -->
+                  <% if article.tc_card == "summary_large_image"%>
+                    <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                      <img src="<%=article.tc_image%>" class="img-fluid pl-4 pr-4">
+                      <% if article.tc_description.blank? == false %>
+                        <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                          <small style="color:grey"><%=article.tc_description%></small>
+                        </span>
+                      <% end %>
+                    </a>
+                  <% elsif article.tc_description.blank? == false %>
+                    <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                      <small style="color:grey"><%=article.tc_description%></small>
+                    </a>
+                  <% else %>
+                    <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                      <span><small style="color:grey">find the article here</small></span>
+                    </a>
+                  <% end %>
+                </div> <!-- col for pic and description -->
+              </div> <!-- row for pic and description -->
+              
+              <ul class="list-unstyled pl-4 pr-4 pt-2">
+                
+                <!-- row for rating, bookmarking + fav -->
+                <div class="row">
+                  
+                  <!-- rating column -->
+                  <div class="col-md-8">
+                    
+                    <!-- computing average rating per article -->
+                    <% ratings_count = article.ratings.count %>
+                    <% if ratings_count > 0 %>
+                      <% sum=0 %>
+                      <% article.ratings.each do |i|%>
+                       <% sum += i.score %>
+                      <% end %>
+                      <% rating_avg = sum / ratings_count%>
+                    <% else %>
+                      <% rating_avg = 0 %>
+                    <% end %>
+                    
+                    <!-- if current user has already rated an article -->
+                    <% if article.user_ratings.where(:id => current_user.id).count != 0 %>
+                      <!-- first star -->
+                      <% if rating_avg == 0%>
+                        <i class="far fa-star"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- second star -->
+                      <% if rating_avg <= 2 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 3 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- third star star -->
+                      <% if rating_avg <= 4 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 5 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- fourth star star -->
+                      <% if rating_avg <= 6 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 7 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <!-- fifth star star -->
+                      <% if rating_avg <= 8 %>
+                        <i class="far fa-star"></i>
+                      <% elsif rating_avg == 9 %>
+                        <i class="fas fa-star-half"></i>
+                      <% else %>
+                        <i class="fas fa-star"></i>
+                      <% end %>
+                      <a href="delete_rating/<%=Rating.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" style="color:grey"> (Unrate)</a>
+                      
+                    <!-- if current user has not yet rated an article -->
+                    <% else %>
+                      <form action="/create_rating" method="post">
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="2">
+                           <% if rating_avg == 0%>
+                             <i class="far fa-star"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="4">
+                           <% if rating_avg <= 2 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 3 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="6">
+                           <% if rating_avg <= 4 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 5 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="8">
+                           <% if rating_avg <= 6 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 7 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="10">
+                           <% if rating_avg <= 8 %>
+                             <i class="far fa-star"></i>
+                           <% elsif rating_avg == 9 %>
+                             <i class="fas fa-star-half"></i>
+                           <% else %>
+                             <i class="fas fa-star"></i>
+                           <% end %>
+                         </button>
+                         <a style="color:grey">
+                           <% if ratings_count == 0 %>
+                             (no ratings yet)
+                           <% elsif ratings_count == 1 %>
+                             (<%=article.ratings.count%> rating)
+                           <% else %>
+                             (<%=article.ratings.count%> ratings)
+                           <% end %>
+                         </a>
+                         <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                         <input type="hidden" name="article_id" value="<%=article.id%>">
+                      </form>
+                    <% end %>   
+                  </div> <!-- col-md-8 for star rating -->
+                  
+                  <!-- bookmarking column -->
+                  <div class="col-md-1 offset-md-2">
+                    <% if article.future_reads.where(:id => current_user.id).count == 0 %>
+                      <form action="/create_bookmark" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="far fa-bookmark fa-1x"></i>
+                        </button>
+                        <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                        <input type="hidden" name="article_id" value="<%=article.id%>">
+                      </form>
+                    <% else %>
+                      <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="fas fa-bookmark fa-1x"></i>
+                        </button>
+                      </a>
+                    <% end %> <!-- bookmark column if case 2 -->
+                  </div>
+                  
+                  <!-- adding to favorites -->
+                  <div class="col-md-1">
+                    <% if article.fans.where(:id => current_user.id).count == 0 %>
+                      <form action="/create_favorite" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="far fa-thumbs-up"></i>
+                        </button>
+                        <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                        <input type="hidden" name="article_id" value="<%=article.id%>">
+                      </form>
+                    <% else %>
+                      <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+                        <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                          <i class="fas fa-thumbs-up fa-1x"></i>
+                        </button>
+                      </a>
+                    <% end %> 
+                  </div> <!-- fav column -->
+                </div> <!-- row for rating, bookmark, fav -->
+                
+                <!-- row for user who posted and caption -->
+                <div class="row">
+                  <div class="col-md-12 pt-2">
+                  <p><em>
+                      <small>shared by</small>
+                      <a href="/users/<%=article.user.id%>"><%=article.user.username%></a>
+                      <small> (<%= time_ago_in_words(article.created_at) %><%=%> ago)</small>
+                    </em><br/>
+                    <%=article.caption%>
+                    <%article.descriptions.each do |element|%>
+                      <a href="/hashtags/<%=element.hashtag_id%>">
+                        <%=Hashtag.find(element.hashtag_id).tag%>
+                      </a>
+                    <%end%>
+                  </p>
+                  <hr>
+                  </div>
+                </div>
+                
+                
+                <!-- rows for comments-->
+                <% if article.comments.length == 0 %>
+                <% elsif article.comments.length == 1 %>
+                  <%comment = article.comments[-1]%>
+                  <div class="row">
+                    <div class="col-md-12" style="line-height:1">
+                      <p style="margin-bottom:5px"><em>
+                          <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
+                        </em>
+                        >> <%=comment.body%>
+                      </p>
+                    </div>
+                  </div>
+                <% else %>
+                  <% article.comments[-2..-1].reverse_each do |comment|%>
+                    <div class="row">
+                      <div class="col-md-12" style="line-height:1">
+                        <p style="margin-bottom:5px"><em>
+                            <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
+                          </em>
+                          >> <%=comment.body%>
+                        </p>
+                      </div>
+                    </div>
+                  <% end%>
+                  <%if article.comments.length > 2%>
+                    <a href="not important" data-toggle="modal" data-target="#showModal<%=article.id%>">
+                      <small>// show all comments</small>
+                    </a>
+                  <%end%>
+                <% end%>
+              
+                <!-- adding a comment-->
+                <li class="media">
+                  <div class="media-body">
+                    <form action="/create_comment" method="post" class="pt-4">
+                      <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                      <input type="hidden" name="article_id" value="<%=article.id%>">
+                      
+                      <div class="form-group">
+                        <label for="body" class="sr-only">
+                          Body
+                        </label>
+                        <div class="input-group">
+                          <input type="text" id="body" name="body" class="form-control" placeholder="Add a comment..." required>
+                          <span class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                              <i class="far fa-comment"></i>
+                              Add Comment
+                            </button>
+                          </span>
+                        </div> <!-- input-group -->
+                      </div> <!-- form-group -->
+                    </form>
+                  </div> <!-- media-body -->
+                </li>
+                
+                 <!-- delete and edit options-->
+                <% if article.user_id == current_user.id%>
+                  <div class="btn-group d-flex" role="group">
+                    <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100" data-toggle="modal" data-target="#editFormModal<%=article.id%>">
+                      <i class="fas fa-edit"></i>
+                      Edit
+                    </a>
+                    <a href="/delete_article/<%=article.id%>" class="btn btn-danger w-100" rel="nofollow">
+                      <i class="fas fa-trash"></i>
+                      Delete
+                    </a>
+                  </div>
+                <% end%>
+                
+                <!-- edit form Modal -->
+                <div class="modal fade" id="editFormModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="editFormModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      
+                      <%= render :partial => "article_templates/edit_form", :locals => {:article => article} %>
+                      
+                      
+                    </div>
+                  </div>
+                </div>
+                
+              </ul>
+            </div> <!-- card body -->
+        </div> <!-- card -->
+      </div> <!-- col -->
+  </div> <!-- row -->
+  <% end %>
 </div>

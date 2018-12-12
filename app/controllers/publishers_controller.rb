@@ -7,6 +7,7 @@ class PublishersController < ApplicationController
 
   def show
     @publisher = Publisher.find(params.fetch("id_to_display"))
+    @articles = @publisher.articles
 
     render("publisher_templates/show.html.erb")
   end
