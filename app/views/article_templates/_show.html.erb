@@ -13,19 +13,33 @@
       <div class="row">
         <div class="col-md-12">
           <!-- snippet of article + desciption with link to website -->
-          <!-- still need to look into video compatibility -->
           <% if article.tc_card == "summary_large_image"%>
             <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
               <img src="<%=article.tc_image%>" class="img-fluid pl-4 pr-4">
               <% if article.tc_description.blank? == false %>
-                <span class="d-none d-sm-block pl-4 pr-4 pt-1">
+                <span class="d-none d-lg-block pl-4 pr-4 pt-1">
                   <small style="color:grey"><%=article.tc_description%></small>
                 </span>
               <% end %>
             </a>
+          <!-- player is associated with videos -->
+          <% elsif article.tc_card == "player"%>
+              <!-- only Youtube videos work so far -->
+              <div class="embed-responsive embed-responsive-16by9">
+                <iframe width="420" height="315"
+                  src="https://www.youtube.com/embed/<%=YoutubeID.from(article.link)%>" class="embed-responsive-item  pl-4 pr-4">
+                </iframe>
+              </div>
+            <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+              <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                <small style="color:grey"><%=article.tc_description%></small>
+              </span>
+            </a>
           <% elsif article.tc_description.blank? == false %>
             <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
-              <small style="color:grey"><%=article.tc_description%></small>
+              <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                <small style="color:grey"><%=article.tc_description%></small>
+              </span>
             </a>
           <% else %>
             <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
