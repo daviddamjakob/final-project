@@ -8,8 +8,8 @@ class UsersController < ApplicationController
    
    def show
        
-       @q = current_user.articles.ransack(params[:q])
-       @posts = @q.result
+       @user_profile = User.find(params.fetch("id_to_display"))
+       @posts = @user_profile.articles
        
        render("users/show")
    end

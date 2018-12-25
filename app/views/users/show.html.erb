@@ -9,38 +9,24 @@
   <div class="row mb-4">
     <div class="col-md-8 offset-md-2">
       <div class="alert alert-success" role="alert">
-        <h5>personal page of @<%=current_user.username%> (user #<%=current_user.id+1%> to this awesome network)</h5>
-        <%articles_count = @posts.count%>
-        <%if articles_count == 0%>
-          Uuuups, it seems as if you haven't shared any content yet. Posting articles can also be of great benefit to yourself, as it enables to seemlessly organize interesting reads. Give it a try 🚀.
-        <%elsif articles_count == 1%>
-          So far, you shared a single piece of content. Let's make it a lot more 🎳.
-        <%else%>
-          You're a star - thanks for sharing all this content with our community. Let's try to keep this up and growing 🏆.
+        <h5>personal page of @<%=@user_profile.username%> (user #<%=@user_profile.id+1%> to this awesome network)</h5>
+        <%if @user_profile.id == current_user.id%>
+          <hr>
+          <%articles_count = @posts.count%>
+          <%if articles_count == 0%>
+            You have not shared any content yet! Posting articles is not only valuable to everyone else in our network but also helps you to organize your knowledge 🤓.
+          <%elsif articles_count == 1%>
+            Thanks for your first post recently, but we are certain you have much more insightful content to share 🚀.
+          <%else%>
+            You already shared quite some content on KnowledgeSwipe - thanks, you're awesome 🤩. Let's keep this up and growing!
+          <%end%>
         <%end%>
       </div>
     </div>
   </div>
   
-  <hr>
   
-  <%= search_form_for @q do |f| %>
-      <p class="lead">Narrow results:</p>
-    
-      <div class="form-group">
-        <%= f.label :tc_title_cont, "Title containing" %>
-        <%= f.text_field :tc_title_cont, :class => "form-control", :placeholder => "Enter a few characters" %>
-      </div>
-    
-      <%= f.submit :class => "btn btn-primary btn-block" %>
-      
-      <a href="/users/<%=current_user.id%>" class="btn btn-default btn-block">Clear filters</a>
-    <% end %>
-    
-    <hr>
-
-
-
+  
   <!-- looping through each posted article -->
   <% @posts.reverse_each do |post| %>
     
