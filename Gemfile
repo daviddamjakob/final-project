@@ -15,6 +15,7 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uglifier", ">= 1.3.0"
 gem "bateman"
 gem 'youtube_id' # https://github.com/reu/youtube_id
+gem "ransack" # for searching and filtering
 
 group :production do
   gem "pg"

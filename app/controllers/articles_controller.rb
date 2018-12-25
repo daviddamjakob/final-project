@@ -2,7 +2,8 @@ class ArticlesController < ApplicationController
   
   
   def index
-    @articles = Article.all
+    @q = Article.ransack(params[:q])
+    @articles = @q.result(:distinct => true).includes(:tags)
 
     render("article_templates/index.html.erb")
   end

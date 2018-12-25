@@ -173,6 +173,14 @@ Rails.application.routes.draw do
   get("/delete_article/:id_to_remove", { :controller => "articles", :action => "destroy_row" })
 
   #------------------------------
+  
+  # Routes for users
+
+  # READ
+  get("/users", { :controller => "users", :action => "index" })
+  get("/users/:id_to_display", { :controller => "users", :action => "show" })
+
+  #------------------------------
 
   devise_for :users
   devise_for :admin_users, ActiveAdmin::Devise.config
