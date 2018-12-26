@@ -10,6 +10,11 @@
     <div class="col-md-8 offset-md-2">
       <div class="alert alert-success" role="alert">
         <h5>personal page of @<%=@user_profile.username%> (user #<%=@user_profile.id+1%> to this awesome network)</h5>
+        <% if @user_profile.bio.empty? %>
+          <p>// no bio available</p>
+        <% else %>
+          <p> <%= @user_profile.bio %> </p>
+        <% end %>
         <%if @user_profile.id == current_user.id%>
           <hr>
           <%articles_count = @posts.count%>
