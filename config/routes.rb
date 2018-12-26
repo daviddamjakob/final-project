@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
   
-  # homepage
-  root "articles#index"
+  devise_for :users
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
-  # Routes for the Publisher resource:
+  authenticated :user do
+    root 'articles#index', as: 'authenticated_root'
+    
+    # Routes for the Publisher resource:
 
   # CREATE
   get("/publishers/new", { :controller => "publishers", :action => "new_form" })
@@ -182,8 +187,12 @@ Rails.application.routes.draw do
 
   #------------------------------
 
-  devise_for :users
-  devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  end
+  
+  devise_scope :user do
+    root 'devise/sessions#new'
+  end
+  
+  
+  
 end

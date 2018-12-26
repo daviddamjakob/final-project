@@ -10,13 +10,36 @@
     <div class="col-md-8 offset-md-2">
       <div class="alert alert-success" role="alert">
         <h5>personal page of @<%=@user_profile.username%> (user #<%=@user_profile.id+1%> to this awesome network)</h5>
+        <!-- bio -->
         <% if @user_profile.bio.empty? %>
           <p>// no bio available</p>
         <% else %>
           <p> <%= @user_profile.bio %> </p>
         <% end %>
+        <!-- social media -->
+        <% if @user_profile.fb_account.present? %>
+          <a href="<%=@user_profile.fb_account%>"><i class="fab fa-facebook" style="color:blue"></i></a>
+        <% else %>
+          <a><i class="fab fa-facebook" style="color:lightgrey"></i></a>
+        <% end %>
+        <% if @user_profile.twitter_account.present? %>
+          <a href="<%=@user_profile.twitter_account%>"><i class="fab fa-twitter"></i></a>
+        <% else %>
+          <a><i class="fab fa-twitter" style="color:lightgrey"></i></a>
+        <% end %>
+        <% if @user_profile.linkedin_account.present? %>
+          <a href="<%=@user_profile.linkedin_account%>"><i class="fab fa-linkedin" style="color:blue"></i></a>
+        <% else %>
+          <a><i class="fab fa-linkedin" style="color:lightgrey"></i></a>
+        <% end %>
+        <% if @user_profile.medium_account.present? %>
+          <a href="<%=@user_profile.medium_account%>"><i class="fab fa-medium" style="color:black"></i></a>
+        <% else %>
+          <a><i class="fab fa-medium" style="color:lightgrey"></i></a>
+        <% end %><br/>
+        <!-- personal remark + edit account -->
         <%if @user_profile.id == current_user.id%>
-          <hr>
+          <hr> <!-- stupid hr line does not show -->
           <%articles_count = @posts.count%>
           <%if articles_count == 0%>
             You have not shared any content yet! Posting articles is not only valuable to everyone else in our network but also helps you to organize your knowledge 🤓.
@@ -25,6 +48,7 @@
           <%else%>
             You already shared quite some content on KnowledgeSwipe - thanks, you're awesome 🤩. Let's keep this up and growing!
           <%end%>
+          <a href="/users/edit"></br><small>Click here to edit your profile settings.</small></a>
         <%end%>
       </div>
     </div>

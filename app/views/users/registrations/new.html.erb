@@ -26,7 +26,7 @@
 
             <%= f.label :email %>
 
-            <%= f.email_field :email, class: email_class, autofocus: true %>
+            <%= f.email_field :email, class: email_class, autofocus: true, :placeholder => "email confirmation is not required (yet)" %>
 
             <% if email_was_invalid %>
               <% resource.errors.full_messages_for(:email).each do |message| %>
@@ -52,7 +52,7 @@
 
             <%= f.label :password %>
 
-            <%= f.password_field :password, class: password_class %>
+            <%= f.password_field :password, class: password_class, :placeholder => "min six characters" %>
 
             <% if password_was_invalid %>
               <% resource.errors.full_messages_for(:password).each do |message| %>
@@ -106,7 +106,7 @@
 
             <%= f.label :username %>
 
-            <%= f.text_field :username, :class => username_class, :placeholder => "Enter username" %>
+            <%= f.text_field :username, :class => username_class, :placeholder => "something unique" %>
 
             <% if username_was_invalid %>
               <% resource.errors.full_messages_for(:username).each do |message| %>
@@ -118,33 +118,8 @@
           </div>
           <!-- Devise Input for username end -->
           
-          <!-- Devise Input for bio start -->
-          <div class="form-group">
-            <% bio_was_invalid = resource.errors.include?(:bio) %>
-
-            <% bio_class = "form-control" %>
-
-            <% if was_validated %>
-              <% if bio_was_invalid %>
-                <% bio_class << " is-invalid" %>
-              <% else %>
-                <% bio_class << " is-valid" %>
-              <% end %>
-            <% end %>
-
-            <%= f.label :bio %>
-
-            <%= f.text_area :bio, :class => bio_class, :placeholder => "Enter bio" %>
-
-            <% if bio_was_invalid %>
-              <% resource.errors.full_messages_for(:bio).each do |message| %>
-                <div class="invalid-feedback d-flex">
-                  <%= message %>
-                </div>
-              <% end %>
-            <% end %>
-          </div>
-          <!-- Devise Input for bio end -->
+          </br><p class="font-italic">Bio and links to social media can be added in the profile settings once the account is set up successfully.</p>
+          
           <%= f.button class: "btn btn-outline-primary btn-block" %>
 
           <hr>

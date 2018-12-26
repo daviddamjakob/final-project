@@ -38,7 +38,7 @@
 
             <%= f.label :email %>
 
-            <%= f.email_field :email, autofocus: true, class: email_class %>
+            <%= f.email_field :email, autofocus: true, class: email_class, :placeholder => "email confirmation is not required (yet)" %>
 
             <% if email_was_invalid %>
               <% resource.errors.full_messages_for(:email).each do |message| %>
@@ -162,7 +162,7 @@
 
             <%= f.label :username %>
 
-            <%= f.text_field :username, :class => username_class, :placeholder => "Enter username" %>
+            <%= f.text_field :username, :class => username_class, :placeholder => "something unique" %>
 
             <% if username_was_invalid %>
               <% resource.errors.full_messages_for(:username).each do |message| %>
@@ -190,7 +190,7 @@
 
             <%= f.label :bio %>
 
-            <%= f.text_area :bio, :class => bio_class, :placeholder => "Enter bio" %>
+            <%= f.text_area :bio, :class => bio_class, :placeholder => "share something about yourself (optional)" %>
 
             <% if bio_was_invalid %>
               <% resource.errors.full_messages_for(:bio).each do |message| %>
@@ -201,6 +201,120 @@
             <% end %>
           </div>
           <!-- Devise Input for bio end -->
+          
+          <!-- Devise Input for fb_account start -->
+          <div class="form-group">
+            <% fb_account_was_invalid = resource.errors.include?(:fb_account) %>
+
+            <% fb_account_class = "form-control" %>
+
+            <% if was_validated %>
+              <% if fb_account_was_invalid %>
+                <% fb_account_class << " is-invalid" %>
+              <% else %>
+                <% fb_account_class << " is-valid" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :fb_account %>
+
+            <%= f.text_field :fb_account, :class => fb_account_class, :placeholder => "link to Facebook account (optional)" %>
+
+            <% if fb_account_was_invalid %>
+              <% resource.errors.full_messages_for(:fb_account).each do |message| %>
+                <div class="invalid-feedback d-flex">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <!-- Devise Input for fb_account end -->
+          
+          <!-- Devise Input for twitter_account start -->
+          <div class="form-group">
+            <% twitter_account_was_invalid = resource.errors.include?(:twitter_account) %>
+
+            <% twitter_account_class = "form-control" %>
+
+            <% if was_validated %>
+              <% if twitter_account_was_invalid %>
+                <% twitter_account_class << " is-invalid" %>
+              <% else %>
+                <% twitter_account_class << " is-valid" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :twitter_account %>
+
+            <%= f.text_field :twitter_account, :class => twitter_account_class, :placeholder => "link to Twitter account (optional)" %>
+
+            <% if twitter_account_was_invalid %>
+              <% resource.errors.full_messages_for(:twitter_account).each do |message| %>
+                <div class="invalid-feedback d-flex">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <!-- Devise Input for twitter_account end -->
+          
+          <!-- Devise Input for linkedin_account start -->
+          <div class="form-group">
+            <% linkedin_account_was_invalid = resource.errors.include?(:linkedin_account) %>
+
+            <% linkedin_account_class = "form-control" %>
+
+            <% if was_validated %>
+              <% if linkedin_account_was_invalid %>
+                <% linkedin_account_class << " is-invalid" %>
+              <% else %>
+                <% linkedin_account_class << " is-valid" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :linkedin_account %>
+
+            <%= f.text_field :linkedin_account, :class => linkedin_account_class, :placeholder => "link to Linkedin account (optional)" %>
+
+            <% if linkedin_account_was_invalid %>
+              <% resource.errors.full_messages_for(:linkedin_account).each do |message| %>
+                <div class="invalid-feedback d-flex">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <!-- Devise Input for linkedin_account end -->
+          
+          <!-- Devise Input for medium_account start -->
+          <div class="form-group">
+            <% medium_account_was_invalid = resource.errors.include?(:medium_account) %>
+
+            <% medium_account_class = "form-control" %>
+
+            <% if was_validated %>
+              <% if medium_account_was_invalid %>
+                <% medium_account_class << " is-invalid" %>
+              <% else %>
+                <% medium_account_class << " is-valid" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :medium_account %>
+
+            <%= f.text_field :medium_account, :class => medium_account_class, :placeholder => "link to Medium account (optional)" %>
+
+            <% if medium_account_was_invalid %>
+              <% resource.errors.full_messages_for(:medium_account).each do |message| %>
+                <div class="invalid-feedback d-flex">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <!-- Devise Input for medium_account end -->
+          
+          
           <%= f.submit "Update", class: "btn btn-block btn-outline-primary" %>
         <% end %>
 
