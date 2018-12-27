@@ -28,6 +28,7 @@ class ArticlesController < ApplicationController
     @article.link = link
     @article.caption = params.fetch("caption")
     @article.reading_time = params.fetch("reading_time")
+    @article.private_status = params.fetch("private_status")
     @article.user_id = params.fetch("user_id")
     
     @article.hashtags_input = params.fetch("hashtags")

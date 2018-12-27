@@ -11,10 +11,10 @@
       <div class="alert alert-success" role="alert">
         <h5>personal page of @<%=@user_profile.username%> (user #<%=@user_profile.id+1%> to this awesome network)</h5>
         <!-- bio -->
-        <% if @user_profile.bio.empty? %>
-          <p>// no bio available</p>
-        <% else %>
+        <% if @user_profile.bio.present? %>
           <p> <%= @user_profile.bio %> </p>
+        <% else %>
+          
         <% end %>
         <!-- social media -->
         <% if @user_profile.fb_account.present? %>

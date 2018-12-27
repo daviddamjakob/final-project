@@ -16,6 +16,7 @@
 #  tc_description :text
 #  author_id      :integer
 #  hashtags_input :text
+#  private_status :boolean
 #
 
 class Article < ApplicationRecord
