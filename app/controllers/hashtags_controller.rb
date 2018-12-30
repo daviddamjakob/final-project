@@ -1,7 +1,49 @@
 class HashtagsController < ApplicationController
   def index
-    @hashtags = Hashtag.all
-
+    hashtags = Hashtag.all
+    
+    focus = []
+    
+    hashtags.each do |hashtag|
+      
+      hashtag_rating_total = 0
+      hashtags_rated_total = 0
+      hashtag.related_articles.each do |article|
+        ratings_count = article.ratings.count
+        if ratings_count > 0
+          sum=0
+          article.ratings.each do |i|
+           sum += i.score
+          end
+          rating_avg = sum / ratings_count
+          hashtag_rating_total += rating_avg
+          hashtags_rated_total += 1
+        else
+          rating_avg = 0
+        end
+      end
+      if hashtags_rated_total == 0
+        hashtag_rating = 0
+      else
+        hashtag_rating = hashtag_rating_total / hashtags_rated_total
+      end
+       
+       hash = {:id => hashtag.id, :hashtag => hashtag.tag, :rating => hashtag_rating, :articles_count => hashtag.related_articles.count}
+       focus.push(hash)
+       
+    end
+    
+    if params[:sort].nil?
+      @focus_sorted = focus.sort_by{|hsh| hsh[:articles_count]}.reverse
+    else
+      if params.fetch("sort") == "rating"
+        @focus_sorted = focus.sort_by{|hsh| hsh[:rating]}.reverse
+      else
+        @focus_sorted = focus.sort_by{|hsh| hsh[:articles_count]}.reverse
+      end
+    end
+    
+    
     render("hashtag_templates/index.html.erb")
   end
 

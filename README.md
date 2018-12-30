@@ -15,3 +15,4 @@ x video presentation; beyond Youtube
 x log in with Facebook?
 x when typing hashtags, give Instagram-style preview of existing tags (with html datalist)
 x use JS ajax to not re-load pages when action is executed
+x change to multi-view (many posts in a screen, e.g. 2x4)

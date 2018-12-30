@@ -119,16 +119,28 @@ class ArticlesController < ApplicationController
     @article.link = params.fetch("link")
     @article.caption = params.fetch("caption")
     @article.reading_time = params.fetch("reading_time")
+    @article.private_status = params.fetch("private_status")
     @article.user_id = params.fetch("user_id")
     
     @article.hashtags_input = params.fetch("hashtags")
     
     if @article.valid?
       
-      # chaning the associated hashtags
+      # changing the associated hashtags
       # must be done before saving so old tags can still be read
       hashtags_old = Article.find(article_id).hashtags_input.split
+      # delete tags not starting with a hash
+      hashtags_old.each do |tag|
+        if tag[0] != "#"
+          hashtags_old.delete(tag)
+        end
+      end
       hashtags_new = @article.hashtags_input.split
+      hashtags_new.each do |tag|
+        if tag[0] != "#"
+          hashtags_new.delete(tag)
+        end
+      end
       
       hashtags_deleted = hashtags_old - hashtags_new
       hashtags_added = hashtags_new - hashtags_old

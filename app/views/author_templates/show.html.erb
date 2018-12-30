@@ -30,6 +30,8 @@
   <!-- looping through each article -->
   <% @articles.reverse_each do |article| %>
   
+  <% next if article.private_status == true && article.user != current_user %>
+  
     <!-- Twitter card code #1 -->
     
     <div class="row mb-5">
@@ -58,6 +60,24 @@
           <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
+                  
+                  <!-- note that article is private -->
+                  <% if article.private_status == true && article.user == current_user %>
+                    <form action="/update_article/<%= article.id %>" method="post">
+                      
+                      <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                      <input type="hidden" name="id_to_modify" value="<%=article.id%>">
+                      <input type="hidden" name="hashtags" value="<%=article.hashtags_input%>">
+                      <input type="hidden" name="reading_time" value="<%=article.reading_time%>">
+                      <input type="hidden" name="caption" value="<%=article.caption%>">
+                      <input type="hidden" name="link" value="<%=article.link%>">
+                      <input type="hidden" name="private_status" value="false">
+                      
+                      <button class="btn btn-light btn-block pl-4 pr-4 pt-1 font-weight-bold" style="color:red">
+                        This content is private. Click to share it with everyone!
+                    </button></br></form>
+                  <% end %>
+                  
                   <!-- snippet of article + desciption with link to website -->
                   <% if article.tc_card == "summary_large_image"%>
                     <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">

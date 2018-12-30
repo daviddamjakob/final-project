@@ -1,6 +1,47 @@
 class PublishersController < ApplicationController
   def index
-    @publishers = Publisher.all
+    publishers = Publisher.all
+    
+    focus = []
+    
+    publishers.each do |publisher|
+      
+      publisher_rating_total = 0
+      publisher_rated_total = 0
+      publisher.articles.each do |article|
+        ratings_count = article.ratings.count
+        if ratings_count > 0
+          sum=0
+          article.ratings.each do |i|
+           sum += i.score
+          end
+          rating_avg = sum / ratings_count
+          publisher_rating_total += rating_avg
+          publisher_rated_total += 1
+        else
+          rating_avg = 0
+        end
+      end
+      if publisher_rated_total == 0
+        publisher_rating = 0
+      else
+        publisher_rating = publisher_rating_total / publisher_rated_total
+      end
+       
+       hash = {:id => publisher.id, :name => publisher.name, :rating => publisher_rating, :articles_count => publisher.articles.count}
+       focus.push(hash)
+       
+    end
+    
+    if params[:sort].nil?
+      @focus_sorted = focus.sort_by{|hsh| hsh[:articles_count]}.reverse
+    else
+      if params.fetch("sort") == "rating"
+        @focus_sorted = focus.sort_by{|hsh| hsh[:rating]}.reverse
+      else
+        @focus_sorted = focus.sort_by{|hsh| hsh[:articles_count]}.reverse
+      end
+    end
 
     render("publisher_templates/index.html.erb")
   end

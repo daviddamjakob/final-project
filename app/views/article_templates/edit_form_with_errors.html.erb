@@ -50,6 +50,12 @@
         <textarea id="hashtags" name="hashtags" class="form-control" rows="2" placeholder="#add #relevant #hashtags"><%= @article.try(:hashtags_input)%></textarea>
       </div>
       
+      <div class="form-check">
+        <%= hidden_field_tag :private_status, "false" %>
+        <input type="checkbox" class="form-check-input" id="private_status" name="private_status" <%= 'checked="checked"' if @article.try(:private_status) == true %>>
+        <label class="form-check-label" for="private_status">Make this private content - it will only be visible to you and not be shared with anyone else in the network.</label>
+      </div></br>
+      
       <input type="hidden" name="user_id" value="<%=current_user.id%>">
       <input type="hidden" name="id_to_modify" value="<%=@article.id%>">
       
