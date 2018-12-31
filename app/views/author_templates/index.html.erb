@@ -1,8 +1,8 @@
 <div class="btn-group dropright">
   <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    sort hashtags
+    sort authors
   </button>
-  <form action="/hashtags">
+  <form action="/authors">
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
     <button class="dropdown-item" <%= button_tag "by articles count", {:class => "bttn-and-txt", :name => "sort", :value => "articles_count"} %></button>
     <button class="dropdown-item" <%= button_tag "by average rating", {:class => "bttn-and-txt", :name => "sort", :value => "rating"} %></button>
