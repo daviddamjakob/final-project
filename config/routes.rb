@@ -186,6 +186,9 @@ Rails.application.routes.draw do
   get("/users/:id_to_display", { :controller => "users", :action => "show" })
 
   #------------------------------
+  
+  # Feedback route
+  get("/feedback", { :controller => "users", :action => "feedback" })
 
   end
   

@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
    
    def index
-   
-   
+      
+      @users = User.all
+      
+      render("users/index")
    end
    
    
@@ -12,6 +14,12 @@ class UsersController < ApplicationController
        @posts = @user_profile.articles
        
        render("users/show")
+   end
+   
+   
+   def feedback
+   
+      render("users/feedback")
    end
     
 end

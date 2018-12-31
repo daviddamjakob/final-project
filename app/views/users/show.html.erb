@@ -54,7 +54,14 @@
     </div>
   </div>
   
-  
+  <!-- no articles have been shared so far note -->
+  <% if @posts.where(:private_status => false).count == 0 && @posts.count == 0 %>
+    <div class="row mb-5">
+      <div class="col-md-8 offset-md-2">
+        <h3 class="display-4">No articles have been shared so far</h1>
+      </div>
+    </div>
+  <% end %>
   
   <!-- looping through each posted article -->
   <% @posts.reverse_each do |post| %>
