@@ -1,0 +1,74 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <h1>
+      All feedback
+    </h1>
+
+  </div>
+</div>
+
+
+<hr>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        
+        <th>
+          submitted
+        </th>
+        
+        <th>
+          Topic
+        </th>
+
+        <th>
+          Pagination
+        </th>
+
+        <th>
+          shared by
+        </th>
+        
+        <th>
+          status
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @feedbacks.reverse.each do |feedback| %>
+      <tr>
+        
+        <td>
+          <%= time_ago_in_words(feedback.created_at) %> ago
+        </td>
+        
+        <td>
+          <%= feedback.topic %>
+        </td>
+
+        <td>
+          <%= feedback.pagination %>
+        </td>
+
+        <td>
+          <%= User.find(feedback.user_id).username %>
+        </td>
+        
+        <td>
+          <%= feedback.status %>
+        </td>
+
+        <td>
+          <a href="/feedbacks/<%= feedback.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

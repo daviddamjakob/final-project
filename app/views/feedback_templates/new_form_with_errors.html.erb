@@ -1,0 +1,84 @@
+<!-- New article button -->
+<div class="row mt-3 mb-5">
+<div class="col-md-8 offset-md-2">
+  <div class="btn-group d-flex" role="group">
+    <a href="/users" class="btn btn-outline-danger w-100">
+      <i class="fas fa-users"></i>
+      Our amazing community
+    </a>
+    <a href="/feedback/new" class="btn btn-danger w-100" rel="nofollow">
+      <i class="fas fa-medkit"></i>
+      Give some feedback!
+    </a>
+  </div>
+</div> <!-- col -->
+</div> <!-- row -->
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+      
+            <!-- card title -->
+            <div class="card-header">
+              <a style="color:black">
+                <h4 class="card-title">
+                  Thanks for sharing your thoughts with us
+              </h4></a>
+            </div> <!-- card header -->
+      
+            <div class="card-body">  
+                <form action="/create_feedback" method="post">
+    
+                  <div class="form-group">
+                    <label for="topic">
+                      what's the matter?
+                    </label>
+                    <select id="topic" name="topic" class="form-control">
+                      <option value="Errors/Dead Ends">Errors/Dead Ends</option>
+                      <option value="Design Improvements">Design Improvements</option>
+                      <option value="Functionalities/Features">Functionalities/Features</option>
+                      <option value="Name/Brand">Name/Brand</option>
+                      <option value="Feedback on general Usability">Feedback on general Usability</option>
+                      <option value="Business Concept">Business Concept</option>
+                      <option value="anything else">anything else</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="pagination">
+                      what section of the platform does this address?
+                    </label>
+                    <select id="pagination" name="pagination" class="form-control">
+                      <option value="Newsfeed/Homepage">Newsfeed/Homepage</option>
+                      <option value="Article Card">Article Card</option>
+                      <option value="Filtering">Filtering</option>
+                      <option value="Bookmarks/Favorites">Bookmarks/Favorites</option>
+                      <option value="Focus Pages">Focus Pages</option>
+                      <option value="User Accounts">User Accounts</option>
+                      <option value="General Remarks">General Remarks</option>
+                      <option value="not relevant">not relevant</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="description">
+                      please elaborate...
+                    </label>
+                
+                    <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+                  </div>
+                  
+                  
+                  <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                  <input type="hidden" name="status" value="submitted">
+                  
+                  <div class="modal-footer">
+                
+                    <button class="btn btn-primary" type="submit">let us know</button>
+                    
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

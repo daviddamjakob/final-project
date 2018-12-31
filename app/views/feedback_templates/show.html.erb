@@ -1,0 +1,72 @@
+<div class="row mb-3">
+  <div class="col-md-8 offset-md-2">
+    <h3>
+      submitted by #<%= User.find(@feedback.user_id).username %>
+    </h3>
+
+    <div class="row mb-3">
+      <div class="col">
+        <a href="/feedbacks" class="btn btn-block btn-outline-secondary">
+          Go back
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="/feedbacks/<%= @feedback.id %>/edit" class="btn btn-block btn-outline-secondary">
+          Edit feedback
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="/delete_feedback/<%= @feedback.id %>" class="btn btn-block btn-outline-secondary">
+          Delete feedback
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Topic
+      </dt>
+      <dd>
+        <%= @feedback.topic %>
+      </dd>
+
+      <dt>
+        Pagination
+      </dt>
+      <dd>
+        <%= @feedback.pagination %>
+      </dd>
+
+      <dt>
+        Description
+      </dt>
+      <dd>
+        <%= @feedback.description %>
+      </dd>
+
+      <dt>
+        Status
+      </dt>
+      <dd>
+        <%= @feedback.status %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@feedback.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@feedback.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
