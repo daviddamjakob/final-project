@@ -16,6 +16,7 @@
 #  twitter_account        :string
 #  linkedin_account       :string
 #  medium_account         :string
+#  test                   :string
 #
 # Indexes
 #
