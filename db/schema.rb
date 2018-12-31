@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181231165602) do
+ActiveRecord::Schema.define(version: 20181231170056) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20181231165602) do
     t.integer "author_id"
     t.text "hashtags_input"
     t.boolean "private_status"
+    t.string "test"
   end
 
   create_table "authors", force: :cascade do |t|

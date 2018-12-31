@@ -17,6 +17,7 @@
 #  author_id      :integer
 #  hashtags_input :text
 #  private_status :boolean
+#  test           :string
 #
 
 class Article < ApplicationRecord
