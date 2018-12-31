@@ -12,10 +12,6 @@
 #  bio                    :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  fb_account             :string
-#  twitter_account        :string
-#  linkedin_account       :string
-#  medium_account         :string
 #
 # Indexes
 #
