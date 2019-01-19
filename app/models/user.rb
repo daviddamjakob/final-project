@@ -15,7 +15,7 @@
 #  fb_account             :string
 #  twitter_account        :string
 #  linkedin_account       :string
-#  medium_account         :string
+#  website_url            :string
 #
 # Indexes
 #

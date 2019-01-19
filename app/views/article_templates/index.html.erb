@@ -425,3 +425,430 @@
     </div> <!-- col-md-6 for articles -->
   </div> <!-- row -->
 </div> <!-- container -->
+<div class="container">
+  <!-- not even sure what this is there for -->
+  <div class="row">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+
+  <!-- New article button -->
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <a href="/articles/new" class="btn btn-primary btn-block" data-toggle="modal" data-target="#newFormModal">
+        <i class="fa fa-fw fa-plus"></i>
+        Share an article
+      </a>
+    </div> <!-- col -->
+  </div> <!-- row -->
+  
+  <!-- new form Modal -->
+  <div class="modal fade" id="newFormModal" tabindex="-1" role="dialog" aria-labelledby="newFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <%= render "article_templates/new_form" %>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class = "row">
+    <div class="col-md-3">
+  
+      <%= search_form_for @q do |f| %>
+        <br/>
+        <p class="lead">Looking for something specific?</p>
+      
+        <div class="form-group">
+          <%= f.label :tags_tag_eq, "exact hashtag" %>
+          <%= f.text_field :tags_tag_eq, :class => "form-control", :placeholder => "#onmymind" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :user_username_eq, "posted by" %>
+          <%= f.text_field :user_username_eq, :class => "form-control", :placeholder => "username" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :tc_title_cont, "title containing" %>
+          <%= f.text_field :tc_title_cont, :class => "form-control", :placeholder => "enter a few characters" %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :reading_time_lteq, "max reading time" %>
+          <%= f.text_field :reading_time_lteq, :class => "form-control", :placeholder => "e.g. 4 for 4 min" %>
+        </div>
+      
+        <%= f.submit :class => "btn btn-danger btn-block" %>
+        
+        <a href="/articles" class="btn btn-default btn-block" style="color:grey">Clear filters</a>
+      <% end %>
+  
+    </div>
+  
+    <div class="col-md-6">
+  
+      <!-- looping through each article -->
+      <% @articles.reverse_each do |article| %>
+      
+        <% next if article.private_status == true && article.user != current_user %>
+        
+        <!-- Twitter card code #1 -->
+        
+        <div class="row mb-5">
+          <div class="col-md-12">
+            <div class="card">
+              
+              <!-- card title -->
+              <div class="card-header">
+                  <a href="not important" style="color:black" data-toggle="modal" data-target="#showModal<%=article.id%>">
+                    <h4 class="card-title">
+                      <%= article.tc_title %>
+                  </h4></a>
+              </div> <!-- card header -->
+              
+              <!-- show form Modal -->
+              <div class="modal fade" id="showModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="showModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    
+                    <%= render :partial => "article_templates/show", :locals => {:article => article} %>
+                  </div>
+                </div>
+              </div>
+              
+              
+              <div class="card-body">  
+                  <div class="row">
+                    <div class="col-md-12">
+                      
+                      <!-- note that article is private -->
+                      <% if article.private_status == true && article.user == current_user %>
+                        <form action="/update_article/<%= article.id %>" method="post">
+                          
+                          <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                          <input type="hidden" name="id_to_modify" value="<%=article.id%>">
+                          <input type="hidden" name="hashtags" value="<%=article.hashtags_input%>">
+                          <input type="hidden" name="reading_time" value="<%=article.reading_time%>">
+                          <input type="hidden" name="caption" value="<%=article.caption%>">
+                          <input type="hidden" name="link" value="<%=article.link%>">
+                          <input type="hidden" name="private_status" value="false">
+                          
+                          <button class="btn btn-light btn-block pl-4 pr-4 pt-1 font-weight-bold" style="color:red">
+                            This content is private. Click to share it with everyone!
+                        </button></br></form>
+                      <% end %>
+                      
+                      <!-- snippet of article + desciption with link to website -->
+                      <% if article.tc_card == "summary_large_image"%>
+                        <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                          <img src="<%=article.tc_image%>" class="img-fluid pl-4 pr-4">
+                          <% if article.tc_description.blank? == false %>
+                            <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                              <small style="color:grey"><%=article.tc_description%></small>
+                            </span>
+                          <% end %>
+                        </a>
+                      <!-- player is associated with videos -->
+                      <% elsif article.tc_card == "player"%>
+                          <!-- only Youtube videos work so far -->
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="420" height="315"
+                              src="https://www.youtube.com/embed/<%=YoutubeID.from(article.link)%>" class="embed-responsive-item  pl-4 pr-4">
+                            </iframe>
+                          </div>
+                        <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                          <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                            <small style="color:grey"><%=article.tc_description%></small>
+                          </span>
+                        </a>
+                      <% elsif article.tc_description.blank? == false %>
+                        <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                          <span class="d-none d-lg-block pl-4 pr-4 pt-1">
+                            <small style="color:grey"><%=article.tc_description%></small>
+                          </span>
+                        </a>
+                      <% else %>
+                        <a target="_blank" rel="noopener noreferrer" href="<%=article.link%>">
+                          <span><small style="color:grey">find the article here</small></span>
+                        </a>
+                      <% end %>
+                    </div> <!-- col for pic and description -->
+                  </div> <!-- row for pic and description -->
+                  
+                  <ul class="list-unstyled pl-4 pr-4 pt-2">
+                    
+                    <!-- row for rating, bookmarking + fav -->
+                    <div class="row">
+                      
+                      <!-- rating column -->
+                      <div class="col-md-8">
+                        
+                        <!-- computing average rating per article -->
+                        <% ratings_count = article.ratings.count %>
+                        <% if ratings_count > 0 %>
+                          <% sum=0 %>
+                          <% article.ratings.each do |i|%>
+                           <% sum += i.score %>
+                          <% end %>
+                          <% rating_avg = sum / ratings_count%>
+                        <% else %>
+                          <% rating_avg = 0 %>
+                        <% end %>
+                        
+                        <!-- if current user has already rated an article -->
+                        <% if article.user_ratings.where(:id => current_user.id).count != 0 %>
+                          <!-- first star -->
+                          <% if rating_avg == 0%>
+                            <i class="far fa-star"></i>
+                          <% else %>
+                            <i class="fas fa-star"></i>
+                          <% end %>
+                          <!-- second star -->
+                          <% if rating_avg <= 2 %>
+                            <i class="far fa-star"></i>
+                          <% elsif rating_avg == 3 %>
+                            <i class="fas fa-star-half"></i>
+                          <% else %>
+                            <i class="fas fa-star"></i>
+                          <% end %>
+                          <!-- third star star -->
+                          <% if rating_avg <= 4 %>
+                            <i class="far fa-star"></i>
+                          <% elsif rating_avg == 5 %>
+                            <i class="fas fa-star-half"></i>
+                          <% else %>
+                            <i class="fas fa-star"></i>
+                          <% end %>
+                          <!-- fourth star star -->
+                          <% if rating_avg <= 6 %>
+                            <i class="far fa-star"></i>
+                          <% elsif rating_avg == 7 %>
+                            <i class="fas fa-star-half"></i>
+                          <% else %>
+                            <i class="fas fa-star"></i>
+                          <% end %>
+                          <!-- fifth star star -->
+                          <% if rating_avg <= 8 %>
+                            <i class="far fa-star"></i>
+                          <% elsif rating_avg == 9 %>
+                            <i class="fas fa-star-half"></i>
+                          <% else %>
+                            <i class="fas fa-star"></i>
+                          <% end %>
+                          <a href="delete_rating/<%=Rating.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" style="color:grey"> (Unrate)</a>
+                          
+                        <!-- if current user has not yet rated an article -->
+                        <% else %>
+                          <form action="/create_rating" method="post">
+                             <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="2">
+                               <% if rating_avg == 0%>
+                                 <i class="far fa-star"></i>
+                               <% else %>
+                                 <i class="fas fa-star"></i>
+                               <% end %>
+                             </button>
+                             <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="4">
+                               <% if rating_avg <= 2 %>
+                                 <i class="far fa-star"></i>
+                               <% elsif rating_avg == 3 %>
+                                 <i class="fas fa-star-half"></i>
+                               <% else %>
+                                 <i class="fas fa-star"></i>
+                               <% end %>
+                             </button>
+                             <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="6">
+                               <% if rating_avg <= 4 %>
+                                 <i class="far fa-star"></i>
+                               <% elsif rating_avg == 5 %>
+                                 <i class="fas fa-star-half"></i>
+                               <% else %>
+                                 <i class="fas fa-star"></i>
+                               <% end %>
+                             </button>
+                             <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="8">
+                               <% if rating_avg <= 6 %>
+                                 <i class="far fa-star"></i>
+                               <% elsif rating_avg == 7 %>
+                                 <i class="fas fa-star-half"></i>
+                               <% else %>
+                                 <i class="fas fa-star"></i>
+                               <% end %>
+                             </button>
+                             <button type="submit" style="background:none; border:none; padding:0; display:inline-block" name="score" value="10">
+                               <% if rating_avg <= 8 %>
+                                 <i class="far fa-star"></i>
+                               <% elsif rating_avg == 9 %>
+                                 <i class="fas fa-star-half"></i>
+                               <% else %>
+                                 <i class="fas fa-star"></i>
+                               <% end %>
+                             </button>
+                             <a style="color:grey">
+                               <% if ratings_count == 0 %>
+                                 (no ratings yet)
+                               <% elsif ratings_count == 1 %>
+                                 (<%=article.ratings.count%> rating)
+                               <% else %>
+                                 (<%=article.ratings.count%> ratings)
+                               <% end %>
+                             </a>
+                             <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                             <input type="hidden" name="article_id" value="<%=article.id%>">
+                          </form>
+                        <% end %>   
+                      </div> <!-- col-md-8 for star rating -->
+                      
+                      <!-- bookmarking column -->
+                      <div class="col-md-1 offset-md-2">
+                        <% if article.future_reads.where(:id => current_user.id).count == 0 %>
+                          <form action="/create_bookmark" method="post">
+                            <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                              <i class="far fa-bookmark fa-1x"></i>
+                            </button>
+                            <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                            <input type="hidden" name="article_id" value="<%=article.id%>">
+                          </form>
+                        <% else %>
+                          <a href="/delete_bookmark/<%=Bookmark.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+                            <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                              <i class="fas fa-bookmark fa-1x"></i>
+                            </button>
+                          </a>
+                        <% end %> <!-- bookmark column if case 2 -->
+                      </div>
+                      
+                      <!-- adding to favorites -->
+                      <div class="col-md-1">
+                        <% if article.fans.where(:id => current_user.id).count == 0 %>
+                          <form action="/create_favorite" method="post">
+                            <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                              <i class="far fa-thumbs-up"></i>
+                            </button>
+                            <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                            <input type="hidden" name="article_id" value="<%=article.id%>">
+                          </form>
+                        <% else %>
+                          <a href="/delete_favorite/<%=Favorite.where(:user_id => current_user.id, :article_id => article.id)[0].id%>" method="post">
+                            <button type="submit" style="background:none; border:none; padding:0; display:inline-block">
+                              <i class="fas fa-thumbs-up fa-1x"></i>
+                            </button>
+                          </a>
+                        <% end %> 
+                      </div> <!-- fav column -->
+                    </div> <!-- row for rating, bookmark, fav -->
+                    
+                    <!-- row for user who posted and caption -->
+                    <div class="row">
+                      <div class="col-md-12 pt-2">
+                      <p><em>
+                          <small>shared by</small>
+                          <a href="/users/<%=article.user.id%>"><%=article.user.username%></a>
+                          <small> (<%= time_ago_in_words(article.created_at) %><%=%> ago)</small>
+                        </em><br/>
+                        <%=article.caption%>
+                        <%article.descriptions.each do |element|%>
+                          <a href="/hashtags/<%=element.hashtag_id%>">
+                            <%=Hashtag.find(element.hashtag_id).tag%>
+                          </a>
+                        <%end%>
+                      </p>
+                      <hr>
+                      </div>
+                    </div>
+                    
+                    
+                    <!-- rows for comments-->
+                    <% if article.comments.length == 0 %>
+                    <% elsif article.comments.length == 1 %>
+                      <%comment = article.comments[-1]%>
+                      <div class="row">
+                        <div class="col-md-12" style="line-height:1">
+                          <p style="margin-bottom:5px"><em>
+                              <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
+                            </em>
+                            >> <%=comment.body%>
+                          </p>
+                        </div>
+                      </div>
+                    <% else %>
+                      <% article.comments[-2..-1].reverse_each do |comment|%>
+                        <div class="row">
+                          <div class="col-md-12" style="line-height:1">
+                            <p style="margin-bottom:5px"><em>
+                                <a href="/users/<%=comment.user_id%>"><%=User.find(comment.user_id).username%></a>
+                              </em>
+                              >> <%=comment.body%>
+                            </p>
+                          </div>
+                        </div>
+                      <% end%>
+                      <%if article.comments.length > 2%>
+                        <a href="not important" data-toggle="modal" data-target="#showModal<%=article.id%>">
+                          <small>// show all comments</small>
+                        </a>
+                      <%end%>
+                    <% end%>
+                  
+                    <!-- adding a comment-->
+                    <li class="media">
+                      <div class="media-body">
+                        <form action="/create_comment" method="post" class="pt-4">
+                          <input type="hidden" name="user_id" value="<%=current_user.id%>">
+                          <input type="hidden" name="article_id" value="<%=article.id%>">
+                          
+                          <div class="form-group">
+                            <label for="body" class="sr-only">
+                              Body
+                            </label>
+                            <div class="input-group">
+                              <input type="text" id="body" name="body" class="form-control" placeholder="Add a comment..." required>
+                              <span class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                  <i class="far fa-comment"></i>
+                                  Add Comment
+                                </button>
+                              </span>
+                            </div> <!-- input-group -->
+                          </div> <!-- form-group -->
+                        </form>
+                      </div> <!-- media-body -->
+                    </li>
+                    
+                     <!-- delete and edit options-->
+                    <% if article.user_id == current_user.id%>
+                      <div class="btn-group d-flex" role="group">
+                        <a href="/articles/<%=article.id%>/edit" class="btn btn-warning w-100" data-toggle="modal" data-target="#editFormModal<%=article.id%>">
+                          <i class="fas fa-edit"></i>
+                          Edit
+                        </a>
+                        <a href="/delete_article/<%=article.id%>" class="btn btn-danger w-100" rel="nofollow">
+                          <i class="fas fa-trash"></i>
+                          Delete
+                        </a>
+                      </div>
+                    <% end%>
+                    
+                    <!-- edit form Modal -->
+                    <div class="modal fade" id="editFormModal<%=article.id%>" tabindex="-1" role="dialog" aria-labelledby="editFormModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          
+                          <%= render :partial => "article_templates/edit_form", :locals => {:article => article} %>
+                          
+                          
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </ul>
+                </div> <!-- card body -->
+            </div> <!-- card -->
+          </div> <!-- col -->
+      </div> <!-- row -->
+      <% end %>
+    </div> <!-- col-md-6 for articles -->
+  </div> <!-- row -->
+</div> <!-- container -->

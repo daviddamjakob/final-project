@@ -202,6 +202,34 @@
           </div>
           <!-- Devise Input for bio end -->
           
+          <!-- Devise Input for website_url start -->
+          <div class="form-group">
+            <% website_url_was_invalid = resource.errors.include?(:website_url) %>
+
+            <% website_url_class = "form-control" %>
+
+            <% if was_validated %>
+              <% if website_url_was_invalid %>
+                <% website_url_class << " is-invalid" %>
+              <% else %>
+                <% website_url_class << " is-valid" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :website_url %>
+
+            <%= f.text_field :website_url, :class => website_url_class, :placeholder => "link to website, blog, newsletter signup, ..." %>
+
+            <% if website_url_was_invalid %>
+              <% resource.errors.full_messages_for(:website_url).each do |message| %>
+                <div class="invalid-feedback d-flex">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <!-- Devise Input for website_url end -->
+          
           <!-- Devise Input for fb_account start -->
           <div class="form-group">
             <% fb_account_was_invalid = resource.errors.include?(:fb_account) %>
@@ -285,34 +313,6 @@
             <% end %>
           </div>
           <!-- Devise Input for linkedin_account end -->
-          
-          <!-- Devise Input for medium_account start -->
-          <div class="form-group">
-            <% medium_account_was_invalid = resource.errors.include?(:medium_account) %>
-
-            <% medium_account_class = "form-control" %>
-
-            <% if was_validated %>
-              <% if medium_account_was_invalid %>
-                <% medium_account_class << " is-invalid" %>
-              <% else %>
-                <% medium_account_class << " is-valid" %>
-              <% end %>
-            <% end %>
-
-            <%= f.label :medium_account %>
-
-            <%= f.text_field :medium_account, :class => medium_account_class, :placeholder => "link to Medium account (optional)" %>
-
-            <% if medium_account_was_invalid %>
-              <% resource.errors.full_messages_for(:medium_account).each do |message| %>
-                <div class="invalid-feedback d-flex">
-                  <%= message %>
-                </div>
-              <% end %>
-            <% end %>
-          </div>
-          <!-- Devise Input for medium_account end -->
           
           
           <%= f.submit "Update", class: "btn btn-block btn-outline-primary" %>

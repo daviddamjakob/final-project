@@ -17,25 +17,33 @@
           
         <% end %>
         <!-- social media -->
+        <% if @user_profile.website_url.present? %>
+          <a target="_blank" rel="noopener noreferrer" href="<%=@user_profile.website_url%>">
+            <i class="fab fa-internet-explorer" style="color:blue"></i>
+          </a>
+        <% else %>
+          <a><i class="fab fa-internet-explorer" style="color:lightgrey"></i></a>
+        <% end %>
         <% if @user_profile.fb_account.present? %>
-          <a href="<%=@user_profile.fb_account%>"><i class="fab fa-facebook" style="color:blue"></i></a>
+          <a target="_blank" rel="noopener noreferrer" href="<%=@user_profile.fb_account%>">
+            <i class="fab fa-facebook" style="color:blue"></i>
+          </a>
         <% else %>
           <a><i class="fab fa-facebook" style="color:lightgrey"></i></a>
         <% end %>
         <% if @user_profile.twitter_account.present? %>
-          <a href="<%=@user_profile.twitter_account%>"><i class="fab fa-twitter"></i></a>
+          <a target="_blank" rel="noopener noreferrer" href="<%=@user_profile.twitter_account%>">
+            <i class="fab fa-twitter"></i>
+          </a>
         <% else %>
           <a><i class="fab fa-twitter" style="color:lightgrey"></i></a>
         <% end %>
         <% if @user_profile.linkedin_account.present? %>
-          <a href="<%=@user_profile.linkedin_account%>"><i class="fab fa-linkedin" style="color:blue"></i></a>
+          <a target="_blank" rel="noopener noreferrer"href="<%=@user_profile.linkedin_account%>">
+            <i class="fab fa-linkedin" style="color:blue"></i>
+          </a>
         <% else %>
           <a><i class="fab fa-linkedin" style="color:lightgrey"></i></a>
-        <% end %>
-        <% if @user_profile.medium_account.present? %>
-          <a href="<%=@user_profile.medium_account%>"><i class="fab fa-medium" style="color:black"></i></a>
-        <% else %>
-          <a><i class="fab fa-medium" style="color:lightgrey"></i></a>
         <% end %><br/>
         <!-- personal remark + edit account -->
         <%if @user_profile.id == current_user.id%>
